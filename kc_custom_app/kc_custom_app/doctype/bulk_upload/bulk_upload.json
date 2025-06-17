@@ -81,6 +81,7 @@
    "read_only": 1
   },
   {
+   "depends_on": "eval:doc.type == \"I&M Local Bank Transfer\";",
    "fieldname": "im_local_bank_transfer",
    "fieldtype": "Table",
    "label": "IM Local Bank Transfer",
