@@ -1,0 +1,119 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{cash_flow_period}",
+ "creation": "2025-06-16 15:41:30.612232",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_mqkx",
+  "amended_from",
+  "type",
+  "get_draft_payments",
+  "column_break_hueq",
+  "cash_flow_period",
+  "section_break_fdpn",
+  "download",
+  "bk_local_bank_transfer",
+  "total_amount",
+  "im_local_bank_transfer"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_mqkx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Bulk Upload",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Type",
+   "options": "\nBK Local Bank Transfer\nI&M Local Bank Transfer",
+   "reqd": 1,
+   "sort_options": 1
+  },
+  {
+   "fieldname": "get_draft_payments",
+   "fieldtype": "Button",
+   "label": "Get Draft Payments"
+  },
+  {
+   "fieldname": "column_break_hueq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cash_flow_period",
+   "fieldtype": "Data",
+   "in_preview": 1,
+   "label": "Cash Flow Period",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_fdpn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "download",
+   "fieldtype": "Button",
+   "label": "Download"
+  },
+  {
+   "depends_on": "eval:doc.type == \"BK Local Bank Transfer\";",
+   "fieldname": "bk_local_bank_transfer",
+   "fieldtype": "Table",
+   "label": "BK Local Bank Transfer",
+   "options": "BK Local Bank Transfer"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Float",
+   "label": "Total Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "im_local_bank_transfer",
+   "fieldtype": "Table",
+   "label": "IM Local Bank Transfer",
+   "options": "IM Local Bank Transfer"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-06-17 14:50:51.378861",
+ "modified_by": "Administrator",
+ "module": "KC Custom App",
+ "name": "Bulk Upload",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
