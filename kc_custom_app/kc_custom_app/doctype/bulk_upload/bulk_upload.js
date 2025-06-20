@@ -49,15 +49,16 @@ function processBKLocalDraftPayments(frm, draftPymnts, grand_totals) {
     draftPymnts.forEach(dp => {
          if (!existingPymnts.has(dp.name)) {
             let newRow = frm.add_child(childTableField);
-            newRow.payment_reference = dp.name;
-            newRow.bank_code = dp.bank_code;
+            newRow.payment_reference = dp.reference_no || dp.name;
+            newRow.bank_code = "BK";
             newRow.debit_account_number= dp.party_bank_account;
-            newRow.debit_account_name = dp.bank_account;
-            newRow.beneficiary_bank_name = dp.party; 
-            newRow.beneficiary_account_name = dp.patry;
+            newRow.debit_account_name = dp.paid_from;
+            newRow.beneficiary_bank_name = dp.bank_name; 
+            newRow.beneficiary_account_name = dp.patry_bank_account;
             newRow.beneficiary_account_number = dp.bank_account;
-            // newRow.currency = dp.reference_no;
+            newRow.transaction_currency = dp.paid_from_account_currency;
             newRow.amount = dp.paid_amount;
+            newRow.reason = dp.reason || "Payment";
 
             existingPymnts.add(dp.name); // Add the new purchase order to the set of existing orders
         }

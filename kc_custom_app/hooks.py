@@ -137,34 +137,43 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+    "Purchase Order": {
+        "on_update": "kc_custom_app.notifications.po_pending_approval.send_po_approved_notification"
+    }
+
+	# "*": {
+	# 	"on_update": "method",
+	# 	"on_cancel": "method",
+	# 	"on_trash": "method"
+	# }
+}
 
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"kc_custom_app.tasks.all"
-# 	],
-# 	"daily": [
-# 		"kc_custom_app.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"kc_custom_app.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"kc_custom_app.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"kc_custom_app.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+    "cron": {
+        "0 12 * * *": [
+            "kc_custom_app.notifications.po_pending_approval.send_pending_po_notifications"
+        ]
+    }
+	# "all": [
+	# 	"kc_custom_app.tasks.all"
+	# ],
+	# "daily": [
+	# 	"kc_custom_app.tasks.daily"
+	# ],
+	# "hourly": [
+	# 	"kc_custom_app.tasks.hourly"
+	# ],
+	# "weekly": [
+	# 	"kc_custom_app.tasks.weekly"
+	# ],
+	# "monthly": [
+	# 	"kc_custom_app.tasks.monthly"
+	# ],
+}
 
 # Testing
 # -------
