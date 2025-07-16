@@ -86,7 +86,7 @@ def send_po_approved_notification(doc, method):
                     recipients=[supplier_email, owner_email],
                     cc =[owner_email],
                     # bcc=["huwizera@kivuchoice.com"],
-                    subject=f"Purchase Order {doc.name} from Victory Farms Limited for {doc.supplier}",
+                    subject=f"Purchase Order {doc.name} from Kivu Choice Limited for {doc.supplier}",
                     message=(
                         f"Hello,<br><br>Please find attached a Purchase Order <b>{doc.name} for {doc.grand_total}{doc.currency}</b>.<br>"
                         f"<br>The delivery due date, address and instructions are included in the Purchase Order.<br>"
