@@ -181,6 +181,17 @@ scheduler_events = {
 	# ],
 }
 
+
+fixtures = [
+    "Client Script",
+    "Server Script",
+    "Custom Field",
+    "Property Setter",
+    {"dt": "Client Script", "filters": [["module", "like", "KC Custom App"]]},
+    {"dt": "Server Script", "filters": [["module", "like", "KC Custom App"]]},
+    {"dt": "Custom Field", "filters": [["module", "like", "KC Custom App"]]},
+    {"dt": "Property Setter", "filters": [["module", "like", "KC Custom App"]]},
+]
 # Testing
 # -------
 
