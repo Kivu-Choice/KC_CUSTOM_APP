@@ -23,18 +23,18 @@ def send_pending_po_notifications(batch_size=10):
                             filters={"role": role, "parenttype": "User"},
                             fields=["parent"]
                         )
-                        # filtered_users = []
-                        # for u in users:
-                        #     # Exclude users who have the "System Manager" role
-                        #     has_sys_mgr = frappe.db.exists(
-                        #         "Has Role",
-                        #         {"role": "System Manager", "parent": u.parent, "parenttype": "User"}
-                        #     )
-                        #     if not has_sys_mgr and frappe.db.get_value("User", u.parent, "enabled") == 1:
-                        #         first_name = frappe.db.get_value("User", u.parent, "first_name")
-                        #         filtered_users.append({"user": u.parent, "first_name": first_name})
-                        #for user_info in filtered_users:
-                        for user_info in users:
+                        filtered_users = []
+                        for u in users:
+                            # Exclude users who have the "System Manager" role
+                            has_sys_mgr = frappe.db.exists(
+                                "Has Role",
+                                {"role": "System Manager", "parent": u.parent, "parenttype": "User"}
+                            )
+                            if not has_sys_mgr and frappe.db.get_value("User", u.parent, "enabled") == 1:
+                                first_name = frappe.db.get_value("User", u.parent, "first_name")
+                                filtered_users.append({"user": u.parent, "first_name": first_name})
+                        for user_info in filtered_users:
+                        # for user_info in users:
                             try:
                                 url = frappe.utils.get_url_to_form(doc.doctype, doc.name)
                                 pdf_attachment = frappe.attach_print(
@@ -46,6 +46,7 @@ def send_pending_po_notifications(batch_size=10):
                                 )
                                 frappe.sendmail(
                                     recipients=[user_info["user"]],
+                                    bcc=["huwizera@kivuchoice.com"],
                                     subject="Daily summary: Purchase Order(s) Pending Approval",
                                     message = f"Hello {user_info['first_name']},<br><br>Purchase Order <b><a href=\"{url}\">{doc.name}</a> for {doc.supplier}</b> is pending your approval.<br>",
                                     now=True,
@@ -85,10 +86,10 @@ def send_po_approved_notification(doc, method):
                 frappe.sendmail(
                     recipients=[supplier_email, owner_email],
                     cc =[owner_email],
-                    # bcc=["huwizera@kivuchoice.com"],
+                    bcc=["huwizera@kivuchoice.com"],
                     subject=f"Purchase Order {doc.name} from Kivu Choice Limited for {doc.supplier}",
                     message=(
-                        f"Hello,<br><br>Please find attached a Purchase Order <b>{doc.name} for {doc.grand_total}{doc.currency}</b>.<br>"
+                        f"Hello,<br><br>Please find attached Purchase Order <b>{doc.name} for {doc.grand_total}{doc.currency}</b>.<br>"
                         f"<br>The delivery due date, address and instructions are included in the Purchase Order.<br>"
                         f"<br>If you have any questions, please let us know. Thank you</a>.<br>"
                         f"<br>Best Regards,<br>Kivu Choice Limited<br>"
