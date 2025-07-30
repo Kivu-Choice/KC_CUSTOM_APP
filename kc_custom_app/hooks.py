@@ -138,15 +138,18 @@ app_license = "mit"
 # Hook on document methods and events
 
 doc_events = {
-    # "Purchase Order": {
-    #     "on_update": "kc_custom_app.notifications.po_pending_approval.send_po_approved_notification"
-    # },
+    "Purchase Order": {
+        "on_update": "kc_custom_app.notifications.po_pending_approval.send_po_approved_notification"
+    },
 	"Purchase Invoice": {
 		"on_submit": "kc_custom_app.custom_scripts.server_scripts.purchase_invoice.on_submit"
 	},
 	"Delivery Note": {
 		"on_submit": "kc_custom_app.custom_scripts.server_scripts.delivery_note.on_submit"
-	}
+	},
+	"Material Request": {
+        "on_update": "kc_custom_app.notifications.mr_pending_approval.send_mr_approved_notification"
+    },
 
 	# "*": {
 	# 	"on_update": "method",
@@ -159,11 +162,14 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
-    # "cron": {
-    #     "0 12 * * *": [
-    #         "kc_custom_app.notifications.po_pending_approval.send_pending_po_notifications"
-    #     ]
-    # }
+    "cron": {
+        "0 12 * * *": [
+            "kc_custom_app.notifications.po_pending_approval.send_pending_po_notifications"
+        ],
+		"0 12 * * *": [
+            "kc_custom_app.notifications.mr_pending_approval.send_pending_mr_notifications"
+        ]
+    }
 	# "all": [
 	# 	"kc_custom_app.tasks.all"
 	# ],

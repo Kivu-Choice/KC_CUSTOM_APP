@@ -11,7 +11,7 @@ def send_pending_mr_notifications(batch_size=10):
             for mr in batch:
                 doc = frappe.get_doc("Material Request", mr.name)
                 # Get the workflow for Material Request
-                workflow = frappe.get_doc("Workflow", {"name": "Material Request"})
+                workflow = frappe.get_doc("Workflow", {"name": "Material Request KC"})
                 for state in workflow.states:
                     if state.state == doc.workflow_state:
                         role = state.allow_edit
@@ -53,7 +53,7 @@ def send_mr_approved_notification(doc, method):
         previous_doc = doc.get_doc_before_save()
         previous_state = previous_doc.workflow_state if previous_doc else None
         
-        # Only send if transitioning to Submitted
+        # Only send if transitioning to Approved
         if previous_state != "Approved" and doc.workflow_state == "Approved":
             #Fetch recipient emails
             owner_email = frappe.db.get_value("User", doc.owner, "email")
