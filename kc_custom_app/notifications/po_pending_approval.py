@@ -46,7 +46,7 @@ def send_pending_po_notifications(batch_size=10):
                                 )
                                 frappe.sendmail(
                                     recipients=[user_info["user"]],
-                                    bcc=["huwizera@kivuchoice.com"],
+                                    cc=["huwizera@kivuchoice.com"],
                                     subject="Daily summary: Purchase Order(s) Pending Approval",
                                     message = f"Hello {user_info['first_name']},<br><br>Purchase Order <b><a href=\"{url}\">{doc.name}</a> for {doc.supplier}</b> is pending your approval.<br>",
                                     now=True,
@@ -69,11 +69,6 @@ def send_po_approved_notification(doc, method):
             owner_email = frappe.db.get_value("User", doc.owner, "email")
             supplier_email = frappe.db.get_value("Supplier", doc.supplier, "email_id")
 
-            frappe.log_error(
-                title="PO Approved Email Notification",
-                message=f"Sending PO Approved notification for {doc.name} to {supplier_email} and {owner_email}"
-            )
-
             # Compose and send email
             try:
                 pdf_attachment = frappe.attach_print(
@@ -85,8 +80,7 @@ def send_po_approved_notification(doc, method):
                 )
                 frappe.sendmail(
                     recipients=[supplier_email, owner_email],
-                    cc =[owner_email],
-                    bcc=["huwizera@kivuchoice.com"],
+                    cc =[owner_email, "huwizera@kivuchoice.com"],
                     subject=f"Purchase Order {doc.name} from Kivu Choice Limited for {doc.supplier}",
                     message=(
                         f"Hello,<br><br>Please find attached Purchase Order <b>{doc.name} for {doc.grand_total}{doc.currency}</b>.<br>"

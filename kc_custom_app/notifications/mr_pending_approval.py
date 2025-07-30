@@ -37,7 +37,7 @@ def send_pending_mr_notifications(batch_size=10):
                                 url = frappe.utils.get_url_to_form(doc.doctype, doc.name)
                                 frappe.sendmail(
                                     recipients=[user_info["user"]],
-                                    bcc=["huwizera@kivuchoice.com"],
+                                    cc=["huwizera@kivuchoice.com"],
                                     subject="Daily summary: Material Request(s) Pending Approval",
                                     message = f"Hello {user_info['first_name']},<br><br>Material Request <b><a href=\"{url}\">{doc.name}</a></b> is pending your approval.<br>",
                                     now=True,
@@ -58,16 +58,11 @@ def send_mr_approved_notification(doc, method):
             #Fetch recipient emails
             owner_email = frappe.db.get_value("User", doc.owner, "email")
 
-            frappe.log_error(
-                title="MR Approved Email Notification",
-                message=f"Sending MR Approved notification for {doc.name} to {owner_email}"
-            )
-
             # Compose and send email
             try:
                 frappe.sendmail(
                     recipients=[owner_email],
-                    bcc=["huwizera@kivuchoice.com"],
+                    cc=["huwizera@kivuchoice.com"],
                     subject=f"Material Request {doc.name} from Kivu Choice Limited",
                     message=(
                         f"Hello,<br><br>Please find attached a Material Request <b>{doc.name}</b>.<br>"
