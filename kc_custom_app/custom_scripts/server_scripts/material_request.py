@@ -4,7 +4,6 @@ from frappe.model.mapper import get_mapped_doc
 @frappe.whitelist()
 def make_purchase_order(source_name, target_doc=None):
     def set_header(source_doc, target_doc, source_parent=None):
-        # now accepts the third arg without complaint
         if source_doc.get("custom_cost_center"):
             target_doc.cost_center = source_doc.custom_cost_center
 

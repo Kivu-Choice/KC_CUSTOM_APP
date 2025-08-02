@@ -141,8 +141,8 @@ doc_events = {
     "Purchase Order": {
         "on_update": "kc_custom_app.notifications.po_pending_approval.send_po_approved_notification"
     },
-	"Purchase Invoice": {
-		"on_submit": "kc_custom_app.custom_scripts.server_scripts.purchase_invoice.on_submit"
+	# "Purchase Invoice": {
+	# 	"on_submit": "kc_custom_app.custom_scripts.server_scripts.purchase_invoice.on_submit"
 	},
 	"Delivery Note": {
 		"on_submit": "kc_custom_app.custom_scripts.server_scripts.delivery_note.on_submit"
