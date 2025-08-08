@@ -1,3 +1,5 @@
+import frappe
+
 def send_pending_mr_notifications(batch_size=10):
     try:
         pending_mrs = frappe.get_all(
