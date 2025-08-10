@@ -1,53 +1,53 @@
 import frappe
 
-def send_pending_mr_notifications(batch_size=10):
-    try:
-        pending_mrs = frappe.get_all(
-            "Material Request",
-            filters={"workflow_state": ["not in", ["Draft", "Approved", "To Amend"]]},
-            fields=["name", "workflow_state"]
-        )
-        total = len(pending_mrs)
-        for batch_start in range(0, total, batch_size):
-            batch = pending_mrs[batch_start:batch_start+batch_size]
-            for mr in batch:
-                doc = frappe.get_doc("Material Request", mr.name)
-                # Get the workflow for Material Request
-                workflow = frappe.get_doc("Workflow", {"name": "Material Request KC"})
-                for state in workflow.states:
-                    if state.state == doc.workflow_state:
-                        role = state.allow_edit
-                        # Get users with the role, but exclude those who are System Managers
-                        users = frappe.get_all(
-                            "Has Role",
-                            filters={"role": role, "parenttype": "User"},
-                            fields=["parent"]
-                        )
-                        filtered_users = []
-                        for u in users:
-                            # Exclude users who have the "System Manager" role
-                            has_sys_mgr = frappe.db.exists(
-                                "Has Role",
-                                {"role": "System Manager", "parent": u.parent, "parenttype": "User"}
-                            )
-                            if not has_sys_mgr and frappe.db.get_value("User", u.parent, "enabled") == 1:
-                                first_name = frappe.db.get_value("User", u.parent, "first_name")
-                                filtered_users.append({"user": u.parent, "first_name": first_name})
-                        for user_info in filtered_users:
-                        # for user_info in users:
-                            try:
-                                url = frappe.utils.get_url_to_form(doc.doctype, doc.name)
-                                frappe.sendmail(
-                                    recipients=[user_info["user"]],
-                                    cc=["huwizera@kivuchoice.com"],
-                                    subject="Daily summary: Material Request(s) Pending Approval",
-                                    message = f"Hello {user_info['first_name']},<br><br>Material Request <b><a href=\"{url}\">{doc.name}</a></b> is pending your approval.<br>",
-                                    now=True,
-                                )
-                            except Exception as e:
-                                frappe.log_error(f"Email error for {user_info['user']}: {e}", "MR Notification Debug")
-    except Exception as e:
-        frappe.log_error(f"General error: {e}", "MR Notification Debug")
+# def send_pending_mr_notifications(batch_size=10):
+#     try:
+#         pending_mrs = frappe.get_all(
+#             "Material Request",
+#             filters={"workflow_state": ["not in", ["Draft", "Approved", "To Amend"]]},
+#             fields=["name", "workflow_state"]
+#         )
+#         total = len(pending_mrs)
+#         for batch_start in range(0, total, batch_size):
+#             batch = pending_mrs[batch_start:batch_start+batch_size]
+#             for mr in batch:
+#                 doc = frappe.get_doc("Material Request", mr.name)
+#                 # Get the workflow for Material Request
+#                 workflow = frappe.get_doc("Workflow", {"name": "Material Request KC"})
+#                 for state in workflow.states:
+#                     if state.state == doc.workflow_state:
+#                         role = state.allow_edit
+#                         # Get users with the role, but exclude those who are System Managers
+#                         users = frappe.get_all(
+#                             "Has Role",
+#                             filters={"role": role, "parenttype": "User"},
+#                             fields=["parent"]
+#                         )
+#                         filtered_users = []
+#                         for u in users:
+#                             # Exclude users who have the "System Manager" role
+#                             has_sys_mgr = frappe.db.exists(
+#                                 "Has Role",
+#                                 {"role": "System Manager", "parent": u.parent, "parenttype": "User"}
+#                             )
+#                             if not has_sys_mgr and frappe.db.get_value("User", u.parent, "enabled") == 1:
+#                                 first_name = frappe.db.get_value("User", u.parent, "first_name")
+#                                 filtered_users.append({"user": u.parent, "first_name": first_name})
+#                         for user_info in filtered_users:
+#                         # for user_info in users:
+#                             try:
+#                                 url = frappe.utils.get_url_to_form(doc.doctype, doc.name)
+#                                 frappe.sendmail(
+#                                     recipients=[user_info["user"]],
+#                                     cc=["huwizera@kivuchoice.com"],
+#                                     subject="Daily summary: Material Request(s) Pending Approval",
+#                                     message = f"Hello {user_info['first_name']},<br><br>Material Request <b><a href=\"{url}\">{doc.name}</a></b> is pending your approval.<br>",
+#                                     now=True,
+#                                 )
+#                             except Exception as e:
+#                                 frappe.log_error(f"Email error for {user_info['user']}: {e}", "MR Notification Debug")
+#     except Exception as e:
+#         frappe.log_error(f"General error: {e}", "MR Notification Debug")
         
 def send_mr_approved_notification(doc, method):
     try:

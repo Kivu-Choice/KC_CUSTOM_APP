@@ -165,10 +165,10 @@ scheduler_events = {
     "cron": {
         "0 13 * * *": [
             "kc_custom_app.notifications.po_pending_approval.send_pending_po_notifications"
-        ],
-		"0 13 * * *": [
-            "kc_custom_app.notifications.mr_pending_approval.send_pending_mr_notifications"
         ]
+		# "0 13 * * *": [
+        #     "kc_custom_app.notifications.mr_pending_approval.send_pending_mr_notifications"
+        # ]
     }
 	# "all": [
 	# 	"kc_custom_app.tasks.all"
