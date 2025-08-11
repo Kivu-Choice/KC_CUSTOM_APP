@@ -49,40 +49,40 @@ import frappe
 #     except Exception as e:
 #         frappe.log_error(f"General error: {e}", "MR Notification Debug")
         
-def send_mr_approved_notification(doc, method):
-    try:
-        #Get previous workflow state
-        previous_doc = doc.get_doc_before_save()
-        previous_state = previous_doc.workflow_state if previous_doc else None
+# def send_mr_approved_notification(doc, method):
+#     try:
+#         #Get previous workflow state
+#         previous_doc = doc.get_doc_before_save()
+#         previous_state = previous_doc.workflow_state if previous_doc else None
         
-        # Only send if transitioning to Approved
-        if previous_state != "Approved" and doc.workflow_state == "Approved":
-            #Fetch recipient emails
-            owner_email = frappe.db.get_value("User", doc.owner, "email")
+#         # Only send if transitioning to Approved
+#         if previous_state != "Approved" and doc.workflow_state == "Approved":
+#             #Fetch recipient emails
+#             owner_email = frappe.db.get_value("User", doc.owner, "email")
 
-            # Compose and send email
-            try:
-                frappe.sendmail(
-                    recipients=[owner_email],
-                    cc=["huwizera@kivuchoice.com"],
-                    subject=f"Material Request {doc.name} from Kivu Choice Limited",
-                    message=(
-                        f"Hello,<br><br>Please find attached a Material Request <b>{doc.name}</b>.<br>"
-                        f"<br>If you have any questions, please let us know. Thank you</a>.<br>"
-                        f"<br>Best Regards,<br>Kivu Choice Limited<br>"
-                    )
-                )
-            except Exception as e:
-                    frappe.log_error(
-                        title="MR Approved Email Notification",
-                        message=f"Email sending failed for MR {doc.name}: {e}"
-                    )
-        else:
-            return
+#             # Compose and send email
+#             try:
+#                 frappe.sendmail(
+#                     recipients=[owner_email],
+#                     cc=["huwizera@kivuchoice.com"],
+#                     subject=f"Material Request {doc.name} from Kivu Choice Limited",
+#                     message=(
+#                         f"Hello,<br><br>Please find attached a Material Request <b>{doc.name}</b>.<br>"
+#                         f"<br>If you have any questions, please let us know. Thank you</a>.<br>"
+#                         f"<br>Best Regards,<br>Kivu Choice Limited<br>"
+#                     )
+#                 )
+#             except Exception as e:
+#                     frappe.log_error(
+#                         title="MR Approved Email Notification",
+#                         message=f"Email sending failed for MR {doc.name}: {e}"
+#                     )
+#         else:
+#             return
           
-    except Exception as e:
-        # return
-        frappe.log_error(
-            title="MR Approved Email Notification",
-            message=f"Fatal error in notification handler for MR {doc.name}: {e}"
-        )
+#     except Exception as e:
+#         # return
+#         frappe.log_error(
+#             title="MR Approved Email Notification",
+#             message=f"Fatal error in notification handler for MR {doc.name}: {e}"
+#         )
