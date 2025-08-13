@@ -7,9 +7,17 @@ def send_pending_mr_notifications(batch_size=10):
             filters={"workflow_state": ["not in", ["Draft", "Approved", "To Amend"]]},
             fields=["name", "workflow_state"]
         )
+
+        if not pending_mrs:
+            return
+
         total = len(pending_mrs)
         for batch_start in range(0, total, batch_size):
             batch = pending_mrs[batch_start:batch_start+batch_size]
+
+            # Dictionary to store: {user_email: {"first_name": ..., "mrs": [(name, url), ...]}}
+            user_mr_map = {}
+
             for mr in batch:
                 doc = frappe.get_doc("Material Request", mr.name)
                 # Get the workflow for Material Request
@@ -23,7 +31,7 @@ def send_pending_mr_notifications(batch_size=10):
                             filters={"role": role, "parenttype": "User"},
                             fields=["parent"]
                         )
-                        filtered_users = []
+
                         for u in users:
                             # Exclude users who have the "System Manager" role
                             has_sys_mgr = frappe.db.exists(
@@ -32,20 +40,32 @@ def send_pending_mr_notifications(batch_size=10):
                             )
                             if not has_sys_mgr and frappe.db.get_value("User", u.parent, "enabled") == 1:
                                 first_name = frappe.db.get_value("User", u.parent, "first_name")
-                                filtered_users.append({"user": u.parent, "first_name": first_name})
-                        for user_info in filtered_users:
-                        # for user_info in users:
-                            try:
                                 url = frappe.utils.get_url_to_form(doc.doctype, doc.name)
-                                frappe.sendmail(
-                                    recipients=[user_info["user"]],
-                                    cc=["huwizera@kivuchoice.com"],
-                                    subject="Daily summary: Material Request(s) Pending Approval",
-                                    message = f"Hello {user_info['first_name']},<br><br>Material Request <b><a href=\"{url}\">{doc.name}</a></b> is pending your approval.<br>",
-                                    now=True,
-                                )
-                            except Exception as e:
-                                frappe.log_error(f"Email error for {user_info['user']}: {e}", "MR Notification Debug")
+
+                                if u.parent not in user_mr_map:
+                                    user_mr_map[u.parent] = {"first_name": first_name, "mrs": []}
+                                user_mr_map[u.parent]["mrs"].append((doc.name, url))
+
+            # Send one email per user with all their MRs
+            for user_email, info in user_mr_map.items():
+                try:
+                    mr_list_html = "".join(
+                        [f'<li><a href="{url}">{name}</a></li>' for name, url in info["mrs"]]
+                    )
+                    message = (
+                        f"Hello {info['first_name']},<br><br>"
+                        "The following Material Request(s) are pending your approval:<br>"
+                        f"<ul>{mr_list_html}</ul>"
+                    )
+                    frappe.sendmail(
+                        recipients=[user_email],
+                        cc=["huwizera@kivuchoice.com"],
+                        subject="Daily summary: Material Request(s) Pending Approval",
+                        message=message,
+                        now=True,
+                    )
+                except Exception as e:
+                    frappe.log_error(f"Email error for {user_email}: {e}", "MR Notification Debug")
     except Exception as e:
         frappe.log_error(f"General error: {e}", "MR Notification Debug")
         
