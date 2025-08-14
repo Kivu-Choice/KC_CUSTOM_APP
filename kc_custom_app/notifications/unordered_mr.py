@@ -33,10 +33,10 @@ def send_unordered_mr_digest(recipients=None):
     """, as_dict=True)
 
     if not mrs:
-            frappe.log_error(
-                title="Unordered MR Digest",
-                message="No submitted purchase-type Material Requests without a linked Purchase Order found."
-            )
+        frappe.log_error(
+            title="Unordered MR Digest",
+            message="No submitted purchase-type Material Requests without a linked Purchase Order found."
+        )
         return
 
     def row(m):
