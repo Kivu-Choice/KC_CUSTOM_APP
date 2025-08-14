@@ -89,6 +89,7 @@ def send_mr_approved_notification(doc, method):
         if previous_state != "Approved" and doc.workflow_state == "Approved":
             #Fetch recipient emails
             owner_email = frappe.db.get_value("User", doc.owner, "email")
+            first_name = frappe.db.get_value("User", doc.owner, "first_name") or "there"
 
             # Compose and send email
             try:
@@ -97,7 +98,7 @@ def send_mr_approved_notification(doc, method):
                     recipients=[owner_email],
                     cc=["huwizera@kivuchoice.com"],
                     subject=f"Material Request {doc.name} Approved",
-                    message = f"Hello {user_info['first_name']},<br><br>Material Request <b><a href=\"{url}\">{doc.name}</a></b> has been approved.<br>"
+                    message = f"Hello {first_name},<br><br>Material Request <b><a href=\"{url}\">{doc.name}</a></b> has been approved.<br>"
                 )
             except Exception as e:
                     frappe.log_error(

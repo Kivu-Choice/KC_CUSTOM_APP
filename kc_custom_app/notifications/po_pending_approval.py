@@ -78,6 +78,14 @@ def send_po_approved_notification(doc, method):
             #Fetch recipient emails
             owner_email = frappe.db.get_value("User", doc.owner, "email")
             supplier_email = frappe.db.get_value("Supplier", doc.supplier, "email_id")
+            recipients = [e for e in [supplier_email, owner_email] if e]
+            if not recipients:
+                frappe.log_error(
+                    title="PO Approved Email Notification",
+                    message=f"No recipient email found for PO {doc.name} "
+                            f"(supplier_email={supplier_email}, owner_email={owner_email})"
+                )
+                return
 
             # Compose and send email
             try:
@@ -89,13 +97,13 @@ def send_po_approved_notification(doc, method):
                     print_letterhead=True
                 )
                 frappe.sendmail(
-                    recipients=[supplier_email, owner_email],
-                    cc =[owner_email, "huwizera@kivuchoice.com"],
+                    recipients = recipients,
+                    cc =["huwizera@kivuchoice.com"],
                     subject=f"Purchase Order {doc.name} from Kivu Choice Limited for {doc.supplier}",
                     message=(
-                        f"Hello,<br><br>Please find attached Purchase Order <b>{doc.name} for {doc.grand_total}{doc.currency}</b>.<br>"
+                        f"Hello,<br><br>Please find attached Purchase Order <b>{doc.name} for {doc.grand_total} {doc.currency}</b>.<br>"
                         f"<br>The delivery due date, address and instructions are included in the Purchase Order.<br>"
-                        f"<br>If you have any questions, please let us know. Thank you</a>.<br>"
+                        f"<br>If you have any questions, please let us know. Thank you.<br>"
                         f"<br>Best Regards,<br>Kivu Choice Limited<br>"
                     ),
                     attachments=[pdf_attachment]
