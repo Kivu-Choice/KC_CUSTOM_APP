@@ -1,6 +1,13 @@
 import frappe
 
+def _enabled():
+    # reads from site_config.json -> "kc_custom_app_notifications_feature_enabled": 1
+    return bool(frappe.conf.get("kc_custom_app_notifications_feature_enabled"))
+
 def send_pending_po_notifications(batch_size=10):
+    if not _enabled():
+        return  # no-op on other sites
+
     try:
         pending_pos = frappe.get_all(
             "Purchase Order",
@@ -58,6 +65,9 @@ def send_pending_po_notifications(batch_size=10):
         frappe.log_error(f"General error: {e}", "PO Notification Debug")
         
 def send_po_approved_notification(doc, method):
+    if not _enabled():
+        return  # no-op on other sites
+
     try:
         #Get previous workflow state
         previous_doc = doc.get_doc_before_save()
