@@ -163,16 +163,16 @@ doc_events = {
 
 scheduler_events = {
     "cron": {
+		"0 10 * * 1-5": [
+			"kc_custom_app.notifications.pending_po_digest.send_pending_po_digest"
+        ],
         "0 13 * * 1-5": [
             "kc_custom_app.notifications.po_pending_approval.send_pending_po_notifications",
 			"kc_custom_app.notifications.mr_pending_approval.send_pending_mr_notifications"
         ],
         "0 14 * * 1-5": [
             "kc_custom_app.notifications.unordered_mr.send_unordered_mr_digest"
-        ],
-		"0 15 * * 1-5": [
-			"kc_custom_app.notifications.pending_po_digest.send_pending_po_digest"
-        ],
+        ]
     }
 	# "all": [
 	# 	"kc_custom_app.tasks.all"
