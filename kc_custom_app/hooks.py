@@ -168,7 +168,9 @@ scheduler_events = {
 			"kc_custom_app.notifications.mr_pending_approval.send_pending_mr_notifications"
         ],
         "0 14 * * 1-5": [
-            "kc_custom_app.notifications.unordered_mr.send_unordered_mr_digest",
+            "kc_custom_app.notifications.unordered_mr.send_unordered_mr_digest"
+        ],
+		"0 15 * * 1-5": [
 			"kc_custom_app.notifications.pending_po_digest.send_pending_po_digest"
         ],
     }
