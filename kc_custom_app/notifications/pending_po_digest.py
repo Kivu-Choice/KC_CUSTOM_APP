@@ -79,7 +79,7 @@ def send_pending_po_digest(min_age_hours: int = 24):
     """
 
     def tr(r):
-        url = frappe.utils.get_link_to_form("Purchase Order", po["name"])
+        url = frappe.utils.get_link_to_form("Purchase Order", r["name"])
         return f"""
         <tr>
           <td><a href="{url}">{r['name']}</a></td>
