@@ -82,7 +82,7 @@ def send_pending_po_digest(min_age_hours: int = 24):
         url = frappe.utils.get_link_to_form("Purchase Order", po["name"])
         return f"""
         <tr>
-          <td><a href="{url}">{po['name']}</a></td>
+          <td><a href="{url}">{r['name']}</a></td>
           <td>{frappe.utils.escape_html(r['supplier'] or '')}</td>
           <td align="right">{_money(r['grand_total'], r['currency'])}</td>
           <td>{frappe.utils.escape_html(r['workflow_state'])}</td>
