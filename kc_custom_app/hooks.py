@@ -147,6 +147,9 @@ doc_events = {
 	"Delivery Note": {
 		"on_submit": "kc_custom_app.custom_scripts.server_scripts.delivery_note.on_submit"
 	},
+	"Purchase Receipt": {
+		"on_submit": "kc_custom_app.custom_scripts.server_scripts.purchase_receipt.on_submit"
+	},
 	"Material Request": {
         "on_update": "kc_custom_app.notifications.mr_pending_approval.send_mr_approved_notification"
     },
