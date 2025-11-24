@@ -13,10 +13,24 @@ def execute(filters=None):
 def get_columns():
     columns = [
         {
+            "label": _("Purchase Order ID"),
+            "options": "Purchase Order",
+            "fieldname": "po_name",
+            "fieldtype": "Link",
+            "width": 140,
+        },
+        {
             "label": _("PO Date"),
             "fieldname": "po_date",
             "fieldtype": "Date",
             "width": 120,
+        },
+        {
+            "label": _("Material Request ID"),
+            "options": "Material Request",
+            "fieldname": "mr_name",
+            "fieldtype": "Link",
+            "width": 140,
         },
         {
             "label": _("Material Request Date"),
@@ -110,6 +124,7 @@ def get_data(filters):
     for row in data:
         if not row.po_name:
             # If there is no PO, PO-related fields are NULL.
+            row.po_name = None
             row.po_date = None
             row.status = row.status 
             row.po_amount = 0
