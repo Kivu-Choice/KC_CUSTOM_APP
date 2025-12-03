@@ -11,7 +11,7 @@ import erpnext
 from erpnext.controllers.taxes_and_totals import init_landed_taxes_and_totals
 from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos
 
-def on_submit(doc, method):
+def on_submit(doc, method: None):
     attachments = frappe.get_all('File', filters={'attached_to_doctype': doc.doctype, 'attached_to_name': doc.name})
     
     if not attachments:
@@ -71,7 +71,7 @@ def create_landed_cost_voucher():
         new_lcv.save()   
         frappe.db.commit()
              
-        new_lcv.submit()        
+        new_lcv.submit()
     
         frappe.response['message'] = new_lcv.name
         
