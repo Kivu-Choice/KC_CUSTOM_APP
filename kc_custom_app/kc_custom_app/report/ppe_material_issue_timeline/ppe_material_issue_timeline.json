@@ -1,0 +1,56 @@
+{
+ "add_total_row": 0,
+ "add_translate_data": 0,
+ "columns": [],
+ "creation": "2025-11-25 15:46:22.667004",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "DateRange",
+   "label": "Date Range",
+   "reqd": 1,
+   "width": 100
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee",
+   "width": 100
+  }
+ ],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Standard",
+ "letterhead": null,
+ "modified": "2025-11-25 15:46:22.667004",
+ "modified_by": "Administrator",
+ "module": "KC Custom App",
+ "name": "PPE Material Issue Timeline",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Stock Entry",
+ "report_name": "PPE Material Issue Timeline",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "Manufacturing Manager"
+  },
+  {
+   "role": "Manufacturing User"
+  },
+  {
+   "role": "Stock User"
+  },
+  {
+   "role": "Stock Manager"
+  },
+  {
+   "role": "Sales Executive"
+  }
+ ],
+ "timeout": 0
+}
