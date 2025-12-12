@@ -20,6 +20,13 @@
    "label": "Employee",
    "options": "Employee",
    "width": 100
+  },
+  {
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "label": "Item Group",
+   "options": "Item Group",
+   "width": 100
   }
  ],
  "idx": 0,
@@ -29,11 +36,11 @@
  "modified": "2025-11-25 15:46:22.667004",
  "modified_by": "Administrator",
  "module": "KC Custom App",
- "name": "PPE Material Issue Timeline",
+ "name": "Employee Material Issue Summary",
  "owner": "Administrator",
  "prepared_report": 0,
  "ref_doctype": "Stock Entry",
- "report_name": "PPE Material Issue Timeline",
+ "report_name": "Employee Material Issue Summary",
  "report_type": "Script Report",
  "roles": [
   {
