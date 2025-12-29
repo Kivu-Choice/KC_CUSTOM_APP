@@ -56,12 +56,13 @@ def get_data(filters):
     # List of values to be passed to the SQL query (for parameterized query)
     query_filters = []
 
-    # 1. Apply Date Range Filter (mandatory from .json)
-    if filters.get("posting_date"):
-        start_date = filters["posting_date"][0]
-        end_date = filters["posting_date"][1]
+    # 1. Apply From Date / To Date Filter
+    if filters.get("from_date") and filters.get("to_date"):
         query += " AND t1.posting_date BETWEEN %s AND %s"
-        query_filters.extend([start_date, end_date])
+        query_filters.extend([
+            filters["from_date"],
+            filters["to_date"]
+        ])
 
     # 2. Apply Employee Filter (optional)
     if filters.get("employee"):

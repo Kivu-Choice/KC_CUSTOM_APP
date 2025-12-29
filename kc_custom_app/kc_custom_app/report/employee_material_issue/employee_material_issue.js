@@ -3,16 +3,20 @@
 
 frappe.query_reports["Employee Material Issue"] = {
 	filters: [
-		{
-			fieldname: "posting_date",
-			label: __("Date Range"),
-			fieldtype: "DateRange",
-			reqd: 1,
-			default: [
-				frappe.datetime.year_start(),
-				frappe.datetime.year_end()
-			]
-		},
+        {
+            fieldname: "from_date",
+            label: __("From Date"),
+            fieldtype: "Date",
+            reqd: 1,
+            default: frappe.datetime.year_start()
+        },
+        {
+            fieldname: "to_date",
+            label: __("To Date"),
+            fieldtype: "Date",
+            reqd: 1,
+            default: frappe.datetime.year_end()
+        },
 		{
 			fieldname: "employee",
 			label: __("Employee"),
