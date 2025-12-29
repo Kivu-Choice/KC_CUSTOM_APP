@@ -1,9 +1,32 @@
-// Set the columns definition for the Employee Material Issue Summary Report
-frappe.query_reports["Employee Material Issue Summary"] = {
-    "filters": [
-        // Note: Filters are defined in the .json file, but this is where we can add client-side logic.
-    ],
-    "columns": [
+// Copyright (c) 2025, Kivu Choice and contributors
+// For license information, please see license.txt
+
+frappe.query_reports["Employee Material Issue"] = {
+	filters: [
+		{
+			fieldname: "posting_date",
+			label: __("Date Range"),
+			fieldtype: "DateRange",
+			reqd: 1,
+			default: [
+				frappe.datetime.year_start(),
+				frappe.datetime.year_end()
+			]
+		},
+		{
+			fieldname: "employee",
+			label: __("Employee"),
+			fieldtype: "Link",
+			options: "Employee"
+		},
+		{
+			fieldname: "item_group",
+			label: __("Item Group"),
+			fieldtype: "Link",
+			options: "Item Group"
+		}
+	],
+	 "columns": [
         {
             "label": __("Employee Name"),
             "fieldname": "employee_name",
