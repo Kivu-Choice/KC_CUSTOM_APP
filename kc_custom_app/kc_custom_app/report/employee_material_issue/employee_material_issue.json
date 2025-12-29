@@ -8,9 +8,16 @@
  "doctype": "Report",
  "filters": [
   {
-   "fieldname": "posting_date",
-   "fieldtype": "DateRange",
-   "label": "Date Range",
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "reqd": 1,
+   "width": 100
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
    "reqd": 1,
    "width": 100
   },
