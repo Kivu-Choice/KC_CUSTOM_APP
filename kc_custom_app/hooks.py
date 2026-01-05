@@ -152,9 +152,9 @@ doc_events = {
 		"on_submit": "kc_custom_app.custom_scripts.server_scripts.purchase_receipt.on_submit"
 	},
 	"Material Request": {
-        "on_update": "kc_custom_app.notifications.mr_pending_approval.send_mr_approved_notification"
-    },
-
+        "on_update": "kc_custom_app.notifications.mr_pending_approval.send_mr_approved_notification",
+		"on_submit": "kc_custom_app.notifications.mr_purchase_request_submitted.send_material_request_purchase_submitted_notification",
+    }
 	# "*": {
 	# 	"on_update": "method",
 	# 	"on_cancel": "method",

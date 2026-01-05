@@ -20,7 +20,7 @@ def send_pending_po_digest(min_age_hours: int = 24):
     if not _enabled():
         return
 
-    recipients = ["jmurengera@kivuchoice.com", "huwizera@kivuchoice.com"]
+    recipients = ["jmurengera@kivuchoice.com", "ebahizi@kivuchoice.com"]
     if not recipients:
         # Nothing to do if we have nobody to notify
         return
@@ -54,7 +54,7 @@ def send_pending_po_digest(min_age_hours: int = 24):
                 "supplier": po.supplier,
                 "grand_total": po.grand_total,
                 "currency": po.currency,
-                "workflow_state": po.workflow_state,   # e.g., "Pending Approval (CFO)"
+                "workflow_state": po.workflow_state,
                 "last_update": last_update,
                 "age": _human_age(last_update),
                 "owner": po.owner,
@@ -62,7 +62,7 @@ def send_pending_po_digest(min_age_hours: int = 24):
             })
 
     if not rows:
-        return  # nothing to report
+        return
 
     # Build HTML table
     header = """
@@ -96,7 +96,7 @@ def send_pending_po_digest(min_age_hours: int = 24):
     body = f"""
     <p>Hi Procurement Manager,</p>
     <p>The following Purchase Orders have been in a pending approval state for more than <b>{min_age_hours} hours</b>.
-    Please follow up with the indicated approver (e.g., CFO) as needed.</p>
+    Please follow up with the indicated approver as needed.</p>
     <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
       {header}
       {''.join(tr(r) for r in rows)}
