@@ -154,12 +154,10 @@ doc_events = {
 	"Material Request": {
         "on_update": "kc_custom_app.notifications.mr_pending_approval.send_mr_approved_notification",
 		"on_submit": "kc_custom_app.notifications.mr_purchase_request_submitted.send_material_request_purchase_submitted_notification",
-    }
-	# "*": {
-	# 	"on_update": "method",
-	# 	"on_cancel": "method",
-	# 	"on_trash": "method"
-	# }
+    },
+	"Payment Entry": {
+        "on_submit": "kc_custom_app.custom_scripts.server_scripts.payment_entry.on_submit"
+    },
 }
 
 # Scheduled Tasks

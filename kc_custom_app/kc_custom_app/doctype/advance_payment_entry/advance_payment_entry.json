@@ -1,0 +1,146 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-20 13:30:40.313722",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "purchase_order",
+  "purchase_order_type",
+  "status",
+  "date",
+  "purchase_order_date",
+  "column_break_tzgs",
+  "currency",
+  "amount",
+  "base_amount",
+  "section_break_yfod",
+  "payment_entries",
+  "total_paid_amount",
+  "purchase_invoices",
+  "total_invoice_amount",
+  "remaining_amount",
+  "purchase_receipts"
+ ],
+ "fields": [
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "Purchase Order",
+   "options": "Purchase Order"
+  },
+  {
+   "fieldname": "purchase_order_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Purchase Order Type"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "New\nPartially Used\nFully Used"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "purchase_order_date",
+   "fieldtype": "Date",
+   "label": "Purchase Order Date"
+  },
+  {
+   "fieldname": "column_break_tzgs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount (Account Currency)",
+   "options": "currency"
+  },
+  {
+   "fieldname": "base_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount (Company Currency)"
+  },
+  {
+   "fieldname": "section_break_yfod",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "payment_entries",
+   "fieldtype": "Table",
+   "label": "Payment Entries",
+   "options": "Advance Payment Entry Item"
+  },
+  {
+   "fieldname": "total_paid_amount",
+   "fieldtype": "Currency",
+   "label": "Total Paid Amount",
+   "options": "currency"
+  },
+  {
+   "fieldname": "purchase_invoices",
+   "fieldtype": "Table",
+   "label": "Purchase Invoices",
+   "options": "Advance Payment Entry Invoice"
+  },
+  {
+   "fieldname": "total_invoice_amount",
+   "fieldtype": "Currency",
+   "label": "Total Invoice Amount",
+   "options": "currency"
+  },
+  {
+   "fieldname": "remaining_amount",
+   "fieldtype": "Currency",
+   "label": "Remaining Amount",
+   "options": "currency"
+  },
+  {
+   "fieldname": "purchase_receipts",
+   "fieldtype": "Table",
+   "label": "Purchase Receipts",
+   "options": "Advance Payment Entry Receipt"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-20 14:01:02.375215",
+ "modified_by": "Administrator",
+ "module": "KC Custom App",
+ "name": "Advance Payment Entry",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
