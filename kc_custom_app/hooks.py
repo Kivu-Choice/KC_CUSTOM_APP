@@ -171,7 +171,10 @@ scheduler_events = {
         "0 13 * * 1-5": [
             "kc_custom_app.notifications.po_pending_approval.send_pending_po_notifications",
 			"kc_custom_app.notifications.mr_pending_approval.send_pending_mr_notifications"
-        ]
+        ],
+		"daily": [
+			"kc_custom_app.kc_custom_app.customization.leave_type.leave_type.auto_create_leave_allocation"
+		]
     }
 	# "all": [
 	# 	"kc_custom_app.tasks.all"
