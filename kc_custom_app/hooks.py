@@ -173,7 +173,7 @@ scheduler_events = {
 			"kc_custom_app.notifications.mr_pending_approval.send_pending_mr_notifications"
         ],
 		"daily": [
-			"kc_custom_app.kc_custom_app.customization.leave_type.leave_type.auto_create_leave_allocation"
+			"kc_custom_app.customization.leave_type.leave_type.auto_create_leave_allocation"
 		]
     }
 	# "all": [
