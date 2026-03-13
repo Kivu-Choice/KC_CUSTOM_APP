@@ -21,6 +21,11 @@ def auto_create_leave_allocation():
     for emp in active_employees:
         if not emp.date_of_joining:
             continue
+        
+        if today() == emp.date_of_joining:
+            # Handle first-day allocation for new joiners
+            create_initial_zero_allocation(emp)
+            continue
             
         doj = get_datetime(emp.date_of_joining)
         
@@ -35,7 +40,7 @@ def get_leave_config(emp):
     """Determines Leave Type and Annual Cap based on Job Level and Tenure."""
     # 1. C&D Level Logic (Director/Chief)
     if emp.custom_job_level in ["Director", "Chief"]:
-        return "Annual Leave C&D Level", 21.0
+        return "Annual Leave C&D", 21.0
     
     # 2. Standard Tenure Logic
     years_worked = date_diff(today(), emp.date_of_joining) / 365.25
@@ -87,13 +92,18 @@ def process_monthly_accrual(emp):
 def create_new_allocation(emp, leave_type, rate, start, end):
     new_doc = frappe.new_doc("Leave Allocation")
     new_doc.update({
-        "employee": emp.name, "leave_type": leave_type,
+        "employee": emp.name, "leave_type": leave_type, "company": emp.company,
         "from_date": start, "to_date": end,
         "new_leaves_allocated": rate, "total_leaves_allocated": rate,
         "carry_forward": 1
     })
     new_doc.insert(ignore_permissions=True).submit()
     create_ledger_entry(new_doc, rate, "Initial Monthly Accrual")
+
+def create_initial_zero_allocation(emp):
+    leave_type, _ = get_leave_config(emp)
+    if not frappe.db.exists("Leave Allocation", {"employee": emp.name, "leave_type": leave_type, "from_date": get_year_start(today())}):
+        create_new_allocation(emp, leave_type, 0, get_year_start(today()), get_year_ending(today()))
 
 def create_ledger_entry(doc, leaves, description):
     ledger = frappe.new_doc("Leave Ledger Entry")
