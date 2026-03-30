@@ -55,9 +55,6 @@ def get_leave_config(emp):
 def process_monthly_accrual(emp):
     """Calculates monthly slice and updates Allocation + Ledger."""
     leave_type, annual_cap = get_leave_config(emp)
-
-    year_start = get_year_start(today())
-    year_end = get_year_ending(today())
     month_name = get_datetime(today()).strftime("%B")
     
     # Monthly slice (e.g., 19 / 12 = 1.583333)
@@ -73,20 +70,20 @@ def process_monthly_accrual(emp):
 
     if alloc_name:
         doc = frappe.get_doc("Leave Allocation", alloc_name)
-        new_total = flt(doc.total_leaves_allocated) + monthly_rate
-        new_allocated = flt(doc.new_leaves_allocated) + monthly_rate
         
-        # Update Allocation Record
-        frappe.db.set_value("Leave Allocation", alloc_name, {
-            "total_leaves_allocated": new_total,
-            "new_leaves_allocated": new_allocated
-        }, update_modified=False)
+        doc.total_leaves_allocated = flt(doc.total_leaves_allocated) + monthly_rate
+        doc.new_leaves_allocated = flt(doc.new_leaves_allocated) + monthly_rate
         
-        # Add Ledger Entry to update actual balance
+        # Save the change to the Allocation document
+        doc.db_update() 
+        
+        # Add Ledger Entry and SUBMIT it
         create_ledger_entry(doc, monthly_rate, f"Accrual: {month_name}")
-        doc.add_comment("Comment", f"Accrued {flt(monthly_rate, 2)} days. New Total: {flt(new_total, 2)}")
+        
+        doc.add_comment("Comment", f"Accrued {flt(monthly_rate, 2)} days. New Total: {flt(doc.total_leaves_allocated, 2)}")
     else:
-        # Create first allocation of the year
+        year_start = get_year_start(today())
+        year_end = get_year_ending(today())
         create_new_allocation(emp, leave_type, monthly_rate, year_start, year_end)
 
 def create_new_allocation(emp, leave_type, rate, start, end):
@@ -106,11 +103,22 @@ def create_initial_zero_allocation(emp):
         create_new_allocation(emp, leave_type, 0, get_year_start(today()), get_year_ending(today()))
 
 def create_ledger_entry(doc, leaves, description):
+    """Creates and Submits a Leave Ledger Entry to ensure report visibility."""
     ledger = frappe.new_doc("Leave Ledger Entry")
     ledger.update({
-        "employee": doc.employee, "leave_type": doc.leave_type,
-        "transaction_type": "Leave Allocation", "transaction_name": doc.name,
-        "leaves": flt(leaves), "from_date": today(), "to_date": doc.to_date,
-        "is_carry_forward": 0, "remarks": description
+        "employee": doc.employee, 
+        "leave_type": doc.leave_type,
+        "transaction_type": "Leave Allocation", 
+        "transaction_name": doc.name,
+        "leaves": flt(leaves), 
+        "from_date": today(), 
+        "to_date": doc.to_date,
+        "is_carry_forward": 0, 
+        "remarks": description
     })
-    ledger.insert(ignore_permissions=True)
+    
+    ledger.flags.ignore_permissions = True
+    ledger.flags.ignore_validate = True 
+    
+    ledger.insert()
+    ledger.submit()

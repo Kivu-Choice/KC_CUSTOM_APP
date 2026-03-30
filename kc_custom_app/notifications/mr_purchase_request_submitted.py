@@ -159,7 +159,6 @@ def send_material_request_purchase_submitted_notification(doc, method=None):
 
         frappe.sendmail(
             recipients=[recipient],
-            cc=["huwizera@kivuchoice.com"],
             subject=f"Material Request (Purchase) Created: {doc.name}",
             message=(
                 f"Hello {frappe.utils.escape_html(greet_name)},<br><br>"
