@@ -1,0 +1,191 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-04-09 08:45:04.164064",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "overview_tab",
+  "naming_series",
+  "department",
+  "column_break_gd3i",
+  "company",
+  "appraisal_cycle",
+  "kras_tab",
+  "appraisal_template",
+  "column_column",
+  "email_template",
+  "goals_section",
+  "goals",
+  "multiplier_section",
+  "multiplier_template",
+  "appraisal_multiplier",
+  "section_break_2wyv",
+  "total_goal_score",
+  "column_break_qbgk",
+  "total_goal_score_percentage",
+  "section_break_0e0z",
+  "appraisal_approver",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended For",
+   "options": "Department Appraisal"
+  },
+  {
+   "fieldname": "overview_tab",
+   "fieldtype": "Tab Break",
+   "label": "Overview"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "no_copy": 1,
+   "options": "HR-DEP-APR-",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Department",
+   "options": "Department",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_gd3i",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "appraisal_cycle",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Appraisal Cycle",
+   "options": "Appraisal Cycle",
+   "reqd": 1
+  },
+  {
+   "fieldname": "kras_tab",
+   "fieldtype": "Tab Break",
+   "label": "KRAs"
+  },
+  {
+   "fieldname": "appraisal_template",
+   "fieldtype": "Link",
+   "label": "Appraisal Template",
+   "options": "Appraisal Template"
+  },
+  {
+   "fieldname": "column_column",
+   "fieldtype": "Column Break",
+   "label": "Column"
+  },
+  {
+   "fieldname": "email_template",
+   "fieldtype": "Link",
+   "label": "Email Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "goals_section",
+   "fieldtype": "Section Break",
+   "label": "Goals"
+  },
+  {
+   "fieldname": "goals",
+   "fieldtype": "Table",
+   "label": "Goals",
+   "options": "Appraisal Goal"
+  },
+  {
+   "fieldname": "multiplier_section",
+   "fieldtype": "Section Break",
+   "label": "Multiplier"
+  },
+  {
+   "fieldname": "multiplier_template",
+   "fieldtype": "Link",
+   "label": "Multiplier Template",
+   "options": "Appraisal Template"
+  },
+  {
+   "fieldname": "section_break_2wyv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_goal_score",
+   "fieldtype": "Float",
+   "label": "Total Department Score"
+  },
+  {
+   "fieldname": "column_break_qbgk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_goal_score_percentage",
+   "fieldtype": "Percent",
+   "label": "Total Goal Score (Percentage)"
+  },
+  {
+   "fieldname": "section_break_0e0z",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "appraisal_approver",
+   "fieldtype": "Table",
+   "label": "Appraisal Approver",
+   "options": "Department Approver"
+  },
+  {
+   "fieldname": "appraisal_multiplier",
+   "fieldtype": "Table",
+   "label": "Appraisal Multiplier",
+   "options": "Appraisal Multiplier"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-04-09 09:18:03.124935",
+ "modified_by": "Administrator",
+ "module": "KC Custom App",
+ "name": "Department Appraisal",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
