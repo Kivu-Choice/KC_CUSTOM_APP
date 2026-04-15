@@ -50,6 +50,6 @@ class TestDepartmentAppraisal(FrappeTestCase):
 
 
     def test_set_kras_without_appraisal_cycle(self):
-            self.appraisal.set_kras()
+        self.appraisal.set_kras()
 
-            self.assertEqual(self.appraisal.goals, [])
+        self.assertEqual(self.appraisal.goals, [])

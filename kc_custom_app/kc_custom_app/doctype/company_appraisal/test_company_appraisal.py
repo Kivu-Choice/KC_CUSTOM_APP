@@ -6,7 +6,7 @@ from frappe.tests.utils import FrappeTestCase
 
 
 class TestCompanyAppraisal(FrappeTestCase):
-	def setUp(self):
+    def setUp(self):
         company = frappe.get_doc({
             "doctype": "Company",
             "company_name": "Test Company",
