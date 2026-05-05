@@ -1,0 +1,124 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-05-05 09:44:29.358178",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "maximum_monthly_hours",
+  "maximum_billable_hours",
+  "overtime_15_activity",
+  "overtime_20_activity",
+  "group_company",
+  "column_break_nbji",
+  "include_early_entry",
+  "min_avg_score_for_bonus",
+  "min_individual_score_for_bonus",
+  "consider_poor_performance",
+  "overtime_threshold",
+  "earned_bonus_vs_attained_score_matrix_section",
+  "bonus_vs_score_matrix"
+ ],
+ "fields": [
+  {
+   "description": "Hours beyond which will be carried over to overtime 1.5",
+   "fieldname": "maximum_monthly_hours",
+   "fieldtype": "Float",
+   "label": "Maximum monthly hours"
+  },
+  {
+   "fieldname": "maximum_billable_hours",
+   "fieldtype": "Float",
+   "label": "Maximum Billable Hours "
+  },
+  {
+   "description": "Activity type used to create overtime 1.5 timesheets",
+   "fieldname": "overtime_15_activity",
+   "fieldtype": "Link",
+   "label": "Overtime 1.5 Activity",
+   "options": "Activity Type"
+  },
+  {
+   "description": "Activity type used to create overtime 2.0 timesheets",
+   "fieldname": "overtime_20_activity",
+   "fieldtype": "Link",
+   "label": "Overtime 2.0 Activity",
+   "options": "Activity Type"
+  },
+  {
+   "fieldname": "group_company",
+   "fieldtype": "Link",
+   "label": "Group Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "column_break_nbji",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "If checked, hours before shift start time will be considered while making salary slips.",
+   "fieldname": "include_early_entry",
+   "fieldtype": "Check",
+   "label": "Include early entry"
+  },
+  {
+   "fieldname": "min_avg_score_for_bonus",
+   "fieldtype": "Float",
+   "label": "Min Department score for Bonus"
+  },
+  {
+   "fieldname": "min_individual_score_for_bonus",
+   "fieldtype": "Float",
+   "label": "Min Individual Score for Bonus"
+  },
+  {
+   "description": "Below of this value will be considered as poor performance for individual Score",
+   "fieldname": "consider_poor_performance",
+   "fieldtype": "Float",
+   "label": "Consider Poor Performance"
+  },
+  {
+   "fieldname": "overtime_threshold",
+   "fieldtype": "Int",
+   "label": "Overtime Threshold"
+  },
+  {
+   "fieldname": "earned_bonus_vs_attained_score_matrix_section",
+   "fieldtype": "Section Break",
+   "label": "Earned Bonus Vs Attained Score Matrix"
+  },
+  {
+   "fieldname": "bonus_vs_score_matrix",
+   "fieldtype": "Table",
+   "label": "Bonus vs Score Matrix",
+   "options": "Earned Bonus vs Attained Score"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-05-05 11:52:05.148075",
+ "modified_by": "Administrator",
+ "module": "KC Custom App",
+ "name": "Custom Payroll Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

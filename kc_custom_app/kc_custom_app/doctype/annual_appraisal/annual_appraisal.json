@@ -1,0 +1,251 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-05-05 11:58:20.067471",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "employee",
+  "fiscal_year",
+  "bonus_potential",
+  "column_break_nmcr",
+  "posting_date",
+  "department",
+  "bonus_potential_department",
+  "bonus_potential_company",
+  "section_break_ofpq",
+  "quarterly_department_details",
+  "quarterly_section",
+  "q1_avg",
+  "q2_avg",
+  "appraisal_payout",
+  "column_break_gxuj",
+  "q3_avg",
+  "q4_avg",
+  "amended_from",
+  "individual_section",
+  "q1_individual",
+  "q2_individual",
+  "column_break_huos",
+  "q3_individual",
+  "q4_individual",
+  "total_section",
+  "total_individual_score",
+  "company_score",
+  "column_break_ijfz",
+  "total_avg",
+  "final_score"
+ ],
+ "fields": [
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Annual Appraisal",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "no_copy": 1,
+   "options": "Employee"
+  },
+  {
+   "fieldname": "fiscal_year",
+   "fieldtype": "Link",
+   "label": "Fiscal Year",
+   "options": "Fiscal Year"
+  },
+  {
+   "fetch_from": "employee.custom_bonus_potential",
+   "fieldname": "bonus_potential",
+   "fieldtype": "Percent",
+   "label": "Bonus Potential"
+  },
+  {
+   "fieldname": "column_break_nmcr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date"
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department"
+  },
+  {
+   "fetch_from": "employee.custom_department_bonus_potential",
+   "fieldname": "bonus_potential_department",
+   "fieldtype": "Percent",
+   "label": "Bonus Potential (Department)"
+  },
+  {
+   "fetch_from": "employee.custom_companygroup_bonus",
+   "fieldname": "bonus_potential_company",
+   "fieldtype": "Percent",
+   "label": "Bonus Potential (Company)"
+  },
+  {
+   "fieldname": "section_break_ofpq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "quarterly_department_details",
+   "fieldtype": "Table",
+   "label": "Quarterly Department Details",
+   "no_copy": 1,
+   "options": "Quarterly Department Details",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quarterly_section",
+   "fieldtype": "Section Break",
+   "label": "Quarterly"
+  },
+  {
+   "fieldname": "q1_avg",
+   "fieldtype": "Float",
+   "label": "Q1 Department Avg",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "q2_avg",
+   "fieldtype": "Float",
+   "label": "Q2 Department Avg",
+   "read_only": 1
+  },
+  {
+   "fieldname": "appraisal_payout",
+   "fieldtype": "Link",
+   "label": "Appraisal Payout",
+   "no_copy": 1,
+   "options": "Appraisal Payout",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_gxuj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "q3_avg",
+   "fieldtype": "Float",
+   "label": "Q3 Department Avg",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "q4_avg",
+   "fieldtype": "Float",
+   "label": "Q4 Department Avg",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "individual_section",
+   "fieldtype": "Section Break",
+   "label": "Individual"
+  },
+  {
+   "fieldname": "q1_individual",
+   "fieldtype": "Float",
+   "label": "Q1 Individual",
+   "read_only": 1
+  },
+  {
+   "fieldname": "q2_individual",
+   "fieldtype": "Float",
+   "label": "Q2 Individual",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_huos",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "q3_individual",
+   "fieldtype": "Float",
+   "label": "Q3 Individual",
+   "read_only": 1
+  },
+  {
+   "fieldname": "q4_individual",
+   "fieldtype": "Float",
+   "label": "Q4 Individual",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_section",
+   "fieldtype": "Section Break",
+   "label": "Total"
+  },
+  {
+   "fieldname": "total_individual_score",
+   "fieldtype": "Float",
+   "label": "Total Individual Score",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "company_score",
+   "fieldtype": "Float",
+   "label": "Company Score",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ijfz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_avg",
+   "fieldtype": "Float",
+   "label": "Total Department Avg",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "final_score",
+   "fieldtype": "Float",
+   "label": "Final Score",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-05-05 14:03:52.903395",
+ "modified_by": "Administrator",
+ "module": "KC Custom App",
+ "name": "Annual Appraisal",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
