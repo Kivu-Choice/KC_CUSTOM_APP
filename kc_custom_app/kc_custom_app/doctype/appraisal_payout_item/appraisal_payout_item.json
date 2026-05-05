@@ -1,0 +1,161 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-04-20 12:54:09.181127",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "employee",
+  "employee_name",
+  "employee_grade",
+  "bonus_potential",
+  "column_break_gitv",
+  "department",
+  "bonus_potential_department",
+  "designation",
+  "section_break_yazc",
+  "individual_score",
+  "department_score",
+  "company_score",
+  "individual_score_value",
+  "department_score_value",
+  "column_break_brff",
+  "individual_bonus",
+  "department_bonus",
+  "company_bonus",
+  "section_break_tzew",
+  "total_bonus"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.grade",
+   "fieldname": "employee_grade",
+   "fieldtype": "Link",
+   "label": "Employee Grade",
+   "options": "Employee Grade",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.custom_assigned_warehouse",
+   "fieldname": "bonus_potential",
+   "fieldtype": "Percent",
+   "label": "Bonus Potential",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_gitv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "department.parent_department",
+   "fieldname": "bonus_potential_department",
+   "fieldtype": "Percent",
+   "label": "Bonus Potential (Department)",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.designation",
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_yazc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "individual_score",
+   "fieldtype": "Percent",
+   "label": "Individual Score"
+  },
+  {
+   "fieldname": "department_score",
+   "fieldtype": "Percent",
+   "label": "Department Score"
+  },
+  {
+   "fieldname": "company_score",
+   "fieldtype": "Percent",
+   "label": "Company Score"
+  },
+  {
+   "fieldname": "individual_score_value",
+   "fieldtype": "Float",
+   "label": "Individual Score Value"
+  },
+  {
+   "fieldname": "department_score_value",
+   "fieldtype": "Float",
+   "label": "Department Score Value"
+  },
+  {
+   "fieldname": "column_break_brff",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "individual_bonus",
+   "fieldtype": "Currency",
+   "label": "Individual Bonus"
+  },
+  {
+   "fieldname": "department_bonus",
+   "fieldtype": "Currency",
+   "label": "Department Bonus"
+  },
+  {
+   "fieldname": "company_bonus",
+   "fieldtype": "Currency",
+   "label": "Company Bonus"
+  },
+  {
+   "fieldname": "section_break_tzew",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_bonus",
+   "fieldtype": "Currency",
+   "label": "Total Bonus"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-04 21:38:06.952102",
+ "modified_by": "Administrator",
+ "module": "KC Custom App",
+ "name": "Appraisal Payout Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
