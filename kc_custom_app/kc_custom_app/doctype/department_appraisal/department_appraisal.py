@@ -64,16 +64,16 @@ class DepartmentAppraisal(Document):
             if not approver.custom_approve:
                 frappe.throw("Please send to the next approver.")
         if frappe.session.user!=get_last_approver(self.appraisal_approver):
-            frappe.throw(f"This appraisal can only be submitted by <strong>{get_last_approver(self.appraisal_approver)}<span style='color:red'>!!</span></strong>")
+            frappe.throw(f"This appraisal can only be submitted by <strong>{get_last_approver(self.appraisal_approver)}</strong>")
 
    #Still testing with other methods ---after_save not working
     def on_update(self):	
         send_emails_to_approver(self.name)
-        if frappe.session.user==get_last_approver(self.appraisal_approver):
-            if self.docstatus==0:
-                frappe.msgprint("You can now submit the test")
-            else:
-                frappe.msgprint("Thank you for submitting department appraisal💐")
+        # if frappe.session.user==get_last_approver(self.appraisal_approver):
+        #     if self.docstatus==0:
+        #         frappe.msgprint("You can now submit the test")
+        #     else:
+        #         frappe.msgprint("Thank you for submitting department appraisal💐")
      
 
 @frappe.whitelist(allow_guest=True)
