@@ -1,5 +1,5 @@
 import frappe
-from frappe.utils import today, format_datetime, get_link_to_form
+from frappe.utils import today, add_days, format_datetime, get_link_to_form
 
 FEATURE_FLAG = "kc_custom_app_notifications_feature_enabled"
 
@@ -15,8 +15,8 @@ def _enabled() -> bool:
 
 def send_daily_fish_received_digest():
     """
-    Daily digest summarizing 'Fish Received at Branch' Stock Entries for today.
-    Runs daily at 6:00 PM via hooks Scheduler.
+    Daily digest summarizing 'Fish Received at Branch' Stock Entries for YESTERDAY.
+    Runs via hooks Scheduler configuration.
     """
     if not _enabled():
         return
@@ -26,10 +26,10 @@ def send_daily_fish_received_digest():
     if not recipients:
         return
 
-    # Since it runs at 6:00 PM same-day, we evaluate entries logged today
-    target_date = today()
+    # Evaluates entries logged yesterday
+    target_date = add_days(today(), -1)
     
-    # Pull all matching stock entries for today
+    # Pull all matching stock entries for yesterday
     entries = frappe.get_all(
         "Stock Entry",
         filters={
@@ -87,7 +87,7 @@ def send_daily_fish_received_digest():
 
     body = f"""
     <p>Hi Team,</p>
-    <p>Here is the 6:00 PM evening summary of <b>Fish Received at Branch</b> Stock Entries for today, <b>{target_date}</b>:</p>
+    <p>Here is the summary of <b>Fish Received at Branch</b> Stock Entries for yesterday, <b>{target_date}</b>:</p>
     {html_tables}
     <br>
     <p style="font-size: 11px; color: #6b7280;">This is an automated performance audit email from ERPNext.</p>
