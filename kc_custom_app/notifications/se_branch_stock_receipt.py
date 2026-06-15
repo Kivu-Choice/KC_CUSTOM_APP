@@ -21,8 +21,18 @@ def send_daily_fish_received_digest():
     if not _enabled():
         return
 
-    # Updated Recipients
-    recipients = ["dbyiringiro@kivuchoice.com", "huwizera@kivuchoice.com"]
+    # Updated Recipients List
+    recipients = [
+        "gniyomuhoza@kivuchoice.com", 
+        "eshema@kivuchoice.com", 
+        "csugira@kivuchoice.com", 
+        "ekayitare@kivuchoice.com", 
+        "dbyiringiro@kivuchoice.com", 
+        "dntaganda@kivuchoice.com", 
+        "ckwisanga@kivuchoice.com", 
+        "amuhire@kivuchoice.com", 
+        "huwizera@kivuchoice.com"
+    ]
     if not recipients:
         return
 
@@ -76,7 +86,7 @@ def send_daily_fish_received_digest():
         <h3 style="color: #1f2937; margin-top: 24px; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px;">{region_name}</h3>
         <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width: 100%; border-color: #e5e7eb;">
           <tr style="background-color: #f9fafb;">
-            <th align="left">Warehouse Branch</th>
+            <th align="left">Warehouse</th>
             <th align="center">Stock Entry ID</th>
             <th align="center">Status</th>
             <th align="center">Logged Time</th>
@@ -90,15 +100,15 @@ def send_daily_fish_received_digest():
     <p>Here is the summary of <b>Fish Received at Branch</b> Stock Entries for yesterday, <b>{target_date}</b>:</p>
     {html_tables}
     <br>
-    <p style="font-size: 11px; color: #6b7280;">This is an automated performance audit email from ERPNext.</p>
+    <p style="font-size: 11px; color: #9ca3af;">Automated Daily Digest | Kivu Choice ERPN team</p>
     """
 
-    subject = f"[Fish Receipt Audit] Summary for {target_date}"
+    subject = f"[Branch Fish Receipt Audit] Summary for {target_date}"
 
     frappe.sendmail(
         recipients=recipients,
         subject=subject,
         message=body,
         delayed=False,
-        header=["Fish Intake Summary", "blue"],
+        header=["Branch Fish Receipt Summary", "blue"],
     )
