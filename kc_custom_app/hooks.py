@@ -182,7 +182,8 @@ scheduler_events = {
 			"kc_custom_app.notifications.mr_pending_approval.send_pending_mr_notifications"
         ],
         "0 10 * * 2-7": [
-            "kc_custom_app.notifications.se_branch_stock_receipt.send_daily_fish_received_digest"
+            "kc_custom_app.notifications.se_branch_stock_receipt.send_daily_fish_received_digest",
+            "kc_custom_app.notifications.sales_invoice_branch.send_daily_sales_invoice_digest"
         ]
     },
 	# "all": [

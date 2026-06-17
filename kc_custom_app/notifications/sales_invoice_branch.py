@@ -13,14 +13,15 @@ REGIONS = {
 def _enabled() -> bool:
     return bool(frappe.conf.get(FEATURE_FLAG))
 
-def send_daily_fish_received_digest():
+def send_daily_sales_invoice_digest():
     """
-    Daily digest summarizing 'Fish Received at Branch' Stock Entries for YESTERDAY.
+    Daily digest summarizing Sales Invoices for YESTERDAY grouped by set_warehouse.
     Runs via hooks Scheduler configuration.
     """
     if not _enabled():
         return
 
+    # Team Recipients
     recipients = [
         "gniyomuhoza@kivuchoice.com", 
         "eshema@kivuchoice.com", 
@@ -35,18 +36,21 @@ def send_daily_fish_received_digest():
     if not recipients:
         return
 
+    # Evaluates invoices logged yesterday
     target_date = add_days(today(), -1)
     
-    entries = frappe.get_all(
-        "Stock Entry",
+    # Pull all matching Sales Invoices for yesterday filtering by set_warehouse mapping
+    invoices = frappe.get_all(
+        "Sales Invoice",
         filters={
-            "stock_entry_type": "Fish Received at Branch",
-            "posting_date": target_date
+            "posting_date": target_date,
+            "docstatus": ["<", 2]  # Exclude Cancelled invoices
         },
-        fields=["name", "to_warehouse", "docstatus", "creation"]
+        fields=["name", "set_warehouse", "docstatus", "creation"]
     )
 
-    entry_map = {e["to_warehouse"]: e for e in entries if e["to_warehouse"]}
+    # Map the set_warehouse to its corresponding document detail
+    invoice_map = {inv["set_warehouse"]: inv for inv in invoices if inv["set_warehouse"]}
 
     def get_status_badge(docstatus):
         if docstatus == 0:
@@ -59,13 +63,13 @@ def send_daily_fish_received_digest():
     for region_name, warehouses in REGIONS.items():
         table_rows = ""
         for wh in warehouses:
-            entry = entry_map.get(wh)
-            if entry:
-                status_text = get_status_badge(entry["docstatus"])
-                doc_link = get_link_to_form("Stock Entry", entry["name"])
-                created_time = format_datetime(entry["creation"], "HH:mm")
+            invoice = invoice_map.get(wh)
+            if invoice:
+                status_text = get_status_badge(invoice["docstatus"])
+                doc_link = get_link_to_form("Sales Invoice", invoice["name"])
+                created_time = format_datetime(invoice["creation"], "HH:mm")
             else:
-                status_text = '<span style="color: #ef4444; font-style: italic;">No Entry Found</span>'
+                status_text = '<span style="color: #ef4444; font-style: italic;">No Invoices Found</span>'
                 doc_link = "-"
                 created_time = "-"
 
@@ -82,8 +86,8 @@ def send_daily_fish_received_digest():
         <h3 style="color: #1f2937; margin-top: 24px; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px;">{region_name}</h3>
         <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width: 100%; border-color: #e5e7eb;">
           <tr style="background-color: #f9fafb;">
-            <th align="left">Warehouse</th>
-            <th align="center">Stock Entry ID</th>
+            <th align="left">Warehouse Branch</th>
+            <th align="center">Sales Invoice ID</th>
             <th align="center">Status</th>
             <th align="center">Logged Time</th>
           </tr>
@@ -93,18 +97,18 @@ def send_daily_fish_received_digest():
 
     body = f"""
     <p>Hi Team,</p>
-    <p>Here is the summary of <b>Fish Received at Branch</b> Stock Entries for yesterday, <b>{target_date}</b>:</p>
+    <p>Here is the summary of <b>Sales Invoice</b> records generated yesterday, <b>{target_date}</b>, mapped by branch source warehouse:</p>
     {html_tables}
     <br>
-    <p style="font-size: 11px; color: #9ca3af;">Automated Daily Digest | Kivu Choice ERPN team</p>
+    <p style="font-size: 11px; color: #9ca3af;">Automated Daily Digest | Kivu Choice ERPN Team</p>
     """
 
-    subject = f"[Branch Fish Receipt Audit] Summary for {target_date}"
+    subject = f"[Branch Sales Invoice Audit] Summary for {target_date}"
 
     frappe.sendmail(
         recipients=recipients,
         subject=subject,
         message=body,
         delayed=False,
-        header=["Branch Fish Receipt Summary", "blue"],
+        header=["Branch Sales Invoice Summary", "blue"],
     )
