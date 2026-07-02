@@ -158,3 +158,10 @@ def send_daily_fish_received_digest():
         delayed=False,
         header=["Daily Fish Movement Summary", "blue"],
     )
+
+def send_daily_fish_received_digest_night():
+    """
+    Wrapper function targeting the 9:30 PM cron execution. 
+    Bypasses Frappe's method uniqueness limitation in hooks.py scheduler setup.
+    """
+    send_daily_fish_received_digest()

@@ -186,8 +186,8 @@ scheduler_events = {
             "kc_custom_app.notifications.sales_invoice_branch.send_daily_sales_invoice_digest"
         ],
         "30 21 * * 1-6": [
-            "kc_custom_app.notifications.se_branch_stock_receipt.send_daily_fish_received_digest",
-            "kc_custom_app.notifications.sales_invoice_branch.send_daily_sales_invoice_digest"
+            "kc_custom_app.notifications.se_branch_stock_receipt.send_daily_fish_received_digest_night",
+            "kc_custom_app.notifications.sales_invoice_branch.send_daily_sales_invoice_digest_night"
         ]
     },
 	# "all": [
