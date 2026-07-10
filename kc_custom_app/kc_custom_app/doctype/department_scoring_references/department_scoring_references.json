@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:department",
  "creation": "2026-04-16 11:47:37.041458",
@@ -37,7 +38,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-16 11:57:20.234147",
+ "modified": "2026-07-10 11:47:46.596494",
  "modified_by": "Administrator",
  "module": "KC Custom App",
  "name": "Department Scoring References",
