@@ -37,7 +37,8 @@ def send_daily_sales_invoice_digest():
         "dshema@kivuchoice.com", 
         "qniyigena@kivuchoice.com", 
         "ytumaini@kivuchoice.com", 
-        "jngizwenayo@kivuchoice.com"
+        "jngizwenayo@kivuchoice.com",
+        "jkagabo@kivuchoice.com"
     ]
     if not recipients:
         return
