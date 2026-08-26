@@ -5,51 +5,50 @@ FEATURE_FLAG_KEY = "kc_custom_app_notifications_feature_enabled"
 # recipient email -> greeting name
 RECIPIENT_NAME = {
     "bkwisanga@kivuchoice.com": "Brice",
-    "cnisingizwe@kivuchoice.com": "Charite",
-    "fiyibukiro@kivuchoice.com": "Fred",
-    "inimuhoze@kivuchoice.com": "Immaculee"
+    "jmurengera@kivuchoice.com": "Justin",
+    "inimuhoze@kivuchoice.com": "Immaculee",
 }
 
 CC_TO_RECIPIENT = {}
 
 # bkwisanga@kivuchoice.com
 for cc in [
+    "101009 - Hatchery Security - KC",
+    "101010 - Kigembe Hatchery Construction - KC",
     "204003 - Kagano Construction - KC",
     "204010 - Maintenance - KC",
+    "204012 - Farm Security - KC",
     "204013 - Mwaga Construction - KC",
-    "204014 - Kigembe Hatchery Construction - KC",
+    "306001 - Fish Logistics Fleet - KC",
+    "306002 - Feed Logitics Fleet - KC",
+    "306003 - Logistics Fleet Maintenance - KC",
 ]:
     CC_TO_RECIPIENT[cc] = "bkwisanga@kivuchoice.com"
 
-# cnisingizwe@kivuchoice.com
-for cc in [
-    "101005 - Pond Feeding - KC",
-    "102003 - Inshore Lake Feeding - KC",
-    "102004 - Offshore Lake Feeding - KC",
-    "102011 - Lake Operations Feed Stores - KC",
-]:
-    CC_TO_RECIPIENT[cc] = "cnisingizwe@kivuchoice.com"
-
-# fiyibukiro@kivuchoice.com
+# jmurengera@kivuchoice.com
 for cc in [
     "101001 - HERO Program - KC",
     "101002 - Incubation - KC",
     "101003 - Egg Collection - KC",
     "101004 - Pond Environment - KC",
+    "101005 - Pond Feeding - KC",
     "101006 - Pond Fish Handling - KC",
     "101007 - Broodstock - KC",
     "101008 - Hatchery Ops - KC",
     "102001 - Production Planning and Reporting - KC",
+    "102002 - Cage Mooring - KC",
+    "102003 - Inshore Lake Feeding - KC",
+    "102004 - Offshore Lake Feeding - KC",
     "102005 - Lake Operations Divers - KC",
+    "102006 - Boats and Distribution - KC",
     "102007 - Net Exchange and Cage Maintenance - KC",
     "102008 - Lake Environment and Data - KC",
     "102009 - Lake Operations Harvesting - KC",
     "102010 - Lake Operations Grading - KC",
-    "102002 - Cage Mooring - KC",
+    "102011 - Lake Operations Feed Stores - KC",
     "102012 - Fish Health - KC",
     "103001 - Processing - KC",
     "103002 - Quality Assurance - KC",
-    "204001 - Boats and Distribution - KC",
     "204002 - Circular Economy - Waste Management - KC",
     "204004 - Farm Fleet Land Based - KC",
     "204005 - Farm Administration - KC",
@@ -58,43 +57,41 @@ for cc in [
     "204008 - Health and Safety - KC",
     "204009 - HouseKeeping - KC",
     "204011 - Net Fabrication and Weaving - KC",
-    "204012 - Farm Security - KC",
+    "204014 - Cage Fabrication - KC",
+    "512003 - Fish Powder - KC",
 ]:
-    CC_TO_RECIPIENT[cc] = "fiyibukiro@kivuchoice.com"
+    CC_TO_RECIPIENT[cc] = "jmurengera@kivuchoice.com"
 
 # inimuhoze@kivuchoice.com
 for cc in [
     "305001 - Kigali LC - KC",
     "305002 - Kamembe LC - KC",
-    "305004 - Farm LC - KC",
     "305003 - Gisenyi LC - KC",
+    "305004 - Farm LC - KC",
     "406001 - Commercial Management - KC",
     "406002 - Marketing - KC",
     "406019 - HORECA Sales - KC",
-    "409013 - Kamembe Town - KC",
-    "409015 - Mobile Branch 1 - KC",
-    "409016 - Mobile Branch 2 - KC",
-    "409014 - Rusizi 1 - KC",
-    "409012 - Rwesero - KC",
-    "409011 - Tyazo - KC",
-    "409023 - Rubavu Town - KC",
-    "407003 - Kabuga Branch - KC",
+    "406020 - D2C Sales - KC",
     "407001 - Kiyovu Branch - KC",
     "407002 - Nyabugogo Branch - KC",
+    "407003 - Kabuga Branch - KC",
     "407004 - Nyamirambo Branch - KC",
     "407005 - Gikondo Branch - KC",
     "407020 - Kanombe Branch - KC",
-    "408010 - Kimironko Branch - KC",
-    "408009 - Ziniya Branch - KC",
-    "408008 - Remera-Giporoso Branch - KC",
     "408006 - Batsinda Branch - KC",
+    "408008 - Remera-Giporoso Branch - KC",
+    "408009 - Ziniya Branch - KC",
+    "408010 - Kimironko Branch - KC",
     "408021 - Gisozi Branch - KC",
     "408022 - Gatenga Branch - KC",
+    "409011 - Tyazo - KC",
+    "409012 - Rwesero - KC",
+    "409013 - Kamembe Town - KC",
+    "409014 - Rusizi 1 - KC",
+    "409015 - Mobile Branch - KC",
+    "409023 - Rubavu Town - KC",
     "410017 - Bukavu Traders - KC",
-    "410018 - Gisenyi Traders - KC",
-    "512001 - Community Relations - KC",
-    "512002 - Reforestation - KC",
-    "512003 - Fish Powder - KC",
+    "410019 - Goma Traders - KC",
     "511001 - Corporate Affairs - KC",
     "511002 - Executive - KC",
     "511003 - Finance - KC",
@@ -103,6 +100,8 @@ for cc in [
     "511006 - Procurement - KC",
     "511007 - Strategy and Operations - KC",
     "511008 - Information Technology - KC",
+    "512001 - Community Relations - KC",
+    "512002 - Reforestation - KC",
 ]:
     CC_TO_RECIPIENT[cc] = "inimuhoze@kivuchoice.com"
 
@@ -171,7 +170,6 @@ def send_material_request_purchase_submitted_notification(doc, method=None):
             now=True,
             attachments=attachments,
         )
-
 
     except Exception as e:
         frappe.log_error(
