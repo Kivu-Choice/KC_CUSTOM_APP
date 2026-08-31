@@ -12,7 +12,6 @@ REGIONS = {
     "Projects": ["HORECA - KC", "D2C - KC"]
 }
 
-# Maps each Region group to its respective Stock Entry Type rule
 ENTRY_TYPES = {
     "Kigali East": ["Fish Received at Branch"],
     "Kigali Central": ["Fish Received at Branch"],
@@ -25,23 +24,26 @@ ENTRY_TYPES = {
 def _enabled() -> bool:
     return bool(frappe.conf.get(FEATURE_FLAG))
 
-def send_daily_fish_received_digest():
-    """
-    Daily digest summarizing Fish Movement (Branch Receipts, Trader Transfers, Project Transfers) for TODAY.
-    Expected execution at 7:00 PM via hooks.py cron schedule.
-    """
+def send_daily_fish_received_digest(execution_label="Evening"):
     if not _enabled():
         return
+
+    # Atomic execution lock (prevents duplicate runs across multiple background workers)
+    lock_key = f"lock:fish_received_digest:{today()}:{execution_label}"
+    if not frappe.cache().add(lock_key, "locked", expires_in_sec=300):
+        return
+
+    # Force MariaDB to discard stale snapshot isolation and read committed data
+    frappe.db.rollback()
 
     recipients = [
         "gniyomuhoza@kivuchoice.com", 
         "eshema@kivuchoice.com", 
         "csugira@kivuchoice.com", 
         "ekayitare@kivuchoice.com", 
-        "dbyiringiro@kivuchoice.com", 
+        "fbyiringiro@kivuchoice.com",
         "dntaganda@kivuchoice.com", 
-        "ckwisanga@kivuchoice.com", 
-        "amuhire@kivuchoice.com", 
+        "ckwisanga@kivuchoice.com",
         "huwizera@kivuchoice.com",
         "dshema@kivuchoice.com", 
         "qniyigena@kivuchoice.com", 
@@ -49,33 +51,26 @@ def send_daily_fish_received_digest():
         "jngizwenayo@kivuchoice.com",
         "jkagabo@kivuchoice.com"
     ]
+    
     if not recipients:
         return
 
     target_date = today()
-    
-    # Extract unique entry types required for the query
     all_target_entry_types = list(set([item for sublist in ENTRY_TYPES.values() for item in sublist]))
 
-    # Fetch entries for today matching any of our custom entry types
-    entries = frappe.get_all(
-        "Stock Entry",
-        filters={
-            "stock_entry_type": ["in", all_target_entry_types],
-            "posting_date": target_date
-        },
-        fields=["name", "to_warehouse", "stock_entry_type", "docstatus", "creation"],
-        order_by="creation asc"
-    )
+    entries = frappe.db.sql("""
+        SELECT name, to_warehouse, stock_entry_type, docstatus, creation
+        FROM `tabStock Entry`
+        WHERE posting_date = %s
+          AND stock_entry_type IN %s
+        ORDER BY creation ASC
+    """, (target_date, tuple(all_target_entry_types)), as_dict=True)
 
-    # Group entries by warehouse
     entry_map = {}
     for e in entries:
         wh = e.get("to_warehouse")
         if wh:
-            if wh not in entry_map:
-                entry_map[wh] = []
-            entry_map[wh].append(e)
+            entry_map.setdefault(wh, []).append(e)
 
     def get_status_badge(docstatus):
         if docstatus == 0:
@@ -86,12 +81,10 @@ def send_daily_fish_received_digest():
 
     html_tables = ""
     for region_name, warehouses in REGIONS.items():
-        # Identify acceptable entry types for this specific block
         allowed_types = ENTRY_TYPES.get(region_name, [])
         table_rows = ""
         
         for wh in warehouses:
-            # Filter entries matching this warehouse AND matching the correct regional entry type rule
             wh_entries = [
                 e for e in entry_map.get(wh, []) 
                 if e["stock_entry_type"] in allowed_types
@@ -102,13 +95,11 @@ def send_daily_fish_received_digest():
                     status_text = get_status_badge(entry["docstatus"])
                     doc_link = get_link_to_form("Stock Entry", entry["name"])
                     created_time = format_datetime(entry["creation"], "HH:mm")
-                    
                     rowspan_attr = f' rowspan="{len(wh_entries)}"' if idx == 0 else ""
                     
-                    table_rows += "<tr>"
-                    if idx == 0:
-                        table_rows += f"<td{rowspan_attr}>{wh}</td>"
                     table_rows += f"""
+                    <tr>
+                      {f'<td{rowspan_attr}>{wh}</td>' if idx == 0 else ''}
                       <td align="center">{doc_link}</td>
                       <td align="center">{status_text}</td>
                       <td align="center">{created_time}</td>
@@ -125,7 +116,6 @@ def send_daily_fish_received_digest():
                 </tr>
                 """
 
-        # Generate region subheader with entry type context info
         type_hint = ", ".join(allowed_types)
         html_tables += f"""
         <h3 style="color: #1f2937; margin-top: 24px; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; margin-bottom: 8px;">
@@ -144,13 +134,13 @@ def send_daily_fish_received_digest():
 
     body = f"""
     <p>Hi Team,</p>
-    <p>Here is the daily audit summary of <b>Fish Operations & Transfers</b> for today, <b>{target_date}</b>:</p>
+    <p>Here is the daily audit summary ({execution_label}) of <b>Fish Operations & Transfers</b> for today, <b>{target_date}</b>:</p>
     {html_tables}
     <br>
-    <p style="font-size: 11px; color: #9ca3af;">Automated Daily Digest | Kivu Choice ERPN team</p>
+    <p style="font-size: 11px; color: #9ca3af;">Automated Daily Digest | Kivu Choice ERPNext Team</p>
     """
 
-    subject = f"[Daily Fish Movement Audit] Summary for {target_date}"
+    subject = f"[{execution_label} Audit] Daily Fish Movement Summary for {target_date}"
 
     frappe.sendmail(
         recipients=recipients,
@@ -161,8 +151,4 @@ def send_daily_fish_received_digest():
     )
 
 def send_daily_fish_received_digest_night():
-    """
-    Wrapper function targeting the 9:30 PM cron execution. 
-    Bypasses Frappe's method uniqueness limitation in hooks.py scheduler setup.
-    """
-    send_daily_fish_received_digest()
+    send_daily_fish_received_digest(execution_label="Night")

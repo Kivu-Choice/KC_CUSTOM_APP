@@ -15,24 +15,26 @@ REGIONS = {
 def _enabled() -> bool:
     return bool(frappe.conf.get(FEATURE_FLAG))
 
-def send_daily_sales_invoice_digest():
-    """
-    Daily digest summarizing Sales Invoices for TODAY grouped by set_warehouse.
-    Expected execution at 7:00 PM via hooks.py cron schedule.
-    """
+def send_daily_sales_invoice_digest(run_type="Evening"):
     if not _enabled():
         return
 
-    # Team Recipients
+    # Atomic execution lock (prevents duplicate runs across multiple background workers)
+    lock_key = f"lock:sales_invoice_digest:{today()}:{run_type}"
+    if not frappe.cache().add(lock_key, "locked", expires_in_sec=300):
+        return
+
+    # Force MariaDB to discard stale snapshot isolation and read committed data
+    frappe.db.rollback()
+
     recipients = [
         "gniyomuhoza@kivuchoice.com", 
         "eshema@kivuchoice.com", 
         "csugira@kivuchoice.com", 
         "ekayitare@kivuchoice.com", 
-        "dbyiringiro@kivuchoice.com", 
+        "fbyiringiro@kivuchoice.com", 
         "dntaganda@kivuchoice.com", 
         "ckwisanga@kivuchoice.com", 
-        "amuhire@kivuchoice.com", 
         "huwizera@kivuchoice.com",
         "dshema@kivuchoice.com", 
         "qniyigena@kivuchoice.com", 
@@ -43,27 +45,20 @@ def send_daily_sales_invoice_digest():
     if not recipients:
         return
 
-    # Evaluates invoices logged today
     target_date = today()
-    
-    # Pull all matching Sales Invoices for today (including Cancelled)
-    invoices = frappe.get_all(
-        "Sales Invoice",
-        filters={
-            "posting_date": target_date
-        },
-        fields=["name", "set_warehouse", "docstatus", "creation"],
-        order_by="creation asc"
-    )
 
-    # Group multiple invoices by set_warehouse
+    invoices = frappe.db.sql("""
+        SELECT name, set_warehouse, docstatus, creation
+        FROM `tabSales Invoice`
+        WHERE posting_date = %s
+        ORDER BY creation ASC
+    """, (target_date,), as_dict=True)
+
     invoice_map = {}
     for inv in invoices:
         wh = inv.get("set_warehouse")
         if wh:
-            if wh not in invoice_map:
-                invoice_map[wh] = []
-            invoice_map[wh].append(inv)
+            invoice_map.setdefault(wh, []).append(inv)
 
     def get_status_badge(docstatus):
         if docstatus == 0:
@@ -79,7 +74,6 @@ def send_daily_sales_invoice_digest():
             wh_invoices = invoice_map.get(wh, [])
             
             if wh_invoices:
-                # Loop through and report all invoices for this warehouse
                 for idx, invoice in enumerate(wh_invoices):
                     status_text = get_status_badge(invoice["docstatus"])
                     doc_link = get_link_to_form("Sales Invoice", invoice["name"])
@@ -87,17 +81,15 @@ def send_daily_sales_invoice_digest():
                     
                     rowspan_attr = f' rowspan="{len(wh_invoices)}"' if idx == 0 else ""
                     
-                    table_rows += "<tr>"
-                    if idx == 0:
-                        table_rows += f"<td{rowspan_attr}>{wh}</td>"
                     table_rows += f"""
+                    <tr>
+                      {f'<td{rowspan_attr}>{wh}</td>' if idx == 0 else ''}
                       <td align="center">{doc_link}</td>
                       <td align="center">{status_text}</td>
                       <td align="center">{created_time}</td>
                     </tr>
                     """
             else:
-                # Fallback for warehouses with no invoices today
                 status_text = '<span style="color: #ef4444; font-style: italic;">No Invoices Found</span>'
                 table_rows += f"""
                 <tr>
@@ -123,25 +115,21 @@ def send_daily_sales_invoice_digest():
 
     body = f"""
     <p>Hi Team,</p>
-    <p>Here is the daily audit summary of <b>Sales Invoice</b> records generated today, <b>{target_date}</b>, mapped by source warehouse:</p>
+    <p>Here is the daily ({run_type}) audit summary of <b>Sales Invoice</b> records generated today, <b>{target_date}</b>, mapped by source warehouse:</p>
     {html_tables}
     <br>
     <p style="font-size: 11px; color: #9ca3af;">Automated Daily Digest | Kivu Choice ERPN Team</p>
     """
 
-    subject = f"[Sales Invoice Audit] Summary for {target_date}"
+    subject = f"[Sales Invoice Audit - {run_type}] Summary for {target_date}"
 
     frappe.sendmail(
         recipients=recipients,
         subject=subject,
         message=body,
         delayed=False,
-        header=["Sales Invoice Audit Summary", "blue"],
+        header=[f"Sales Invoice Audit Summary ({run_type})", "blue"],
     )
 
 def send_daily_sales_invoice_digest_night():
-    """
-    Wrapper function targeting the 9:30 PM cron execution.
-    Bypasses Frappe's method uniqueness limitation in hooks.py scheduler setup.
-    """
-    send_daily_sales_invoice_digest()
+    send_daily_sales_invoice_digest(run_type="Night")
