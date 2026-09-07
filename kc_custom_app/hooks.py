@@ -174,6 +174,9 @@ doc_events = {
 
 scheduler_events = {
     "cron": {
+        "0 6 * * *": [
+			"kc_custom_app.kc_custom_app.utils.bnr_exchange.fetch_bnr_rates"
+		],
 		"0 10 * * 1-5": [
 			"kc_custom_app.notifications.pending_po_digest.send_pending_po_digest"
         ],
