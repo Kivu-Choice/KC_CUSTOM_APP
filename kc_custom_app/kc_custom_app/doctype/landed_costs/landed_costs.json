@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "creation": "2025-08-25 15:27:19.785285",
  "doctype": "DocType",
@@ -71,7 +72,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-08-25 16:26:31.153940",
+ "modified": "2026-09-09 11:57:23.507567",
  "modified_by": "Administrator",
  "module": "KC Custom App",
  "name": "Landed Costs",
