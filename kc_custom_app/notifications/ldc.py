@@ -3,6 +3,9 @@ from frappe.utils import get_url_to_form, get_last_day, getdate, formatdate
 from frappe.utils.data import get_quarter_start, get_quarter_ending
 from datetime import date
 
+def _enabled():
+    return bool(frappe.conf.get("kc_custom_app_notifications_feature_enabled"))
+
 def _get_quarter_label(target_date: date) -> str:
     q_start = get_quarter_start(target_date)
     q_end = get_quarter_ending(target_date)
@@ -78,7 +81,10 @@ def create_ldc_for_employee(employee: str, department: str, reports_to: str, qua
         frappe.log_error(frappe.get_traceback(), "generate_quarterly_ldcs: create failed")
         return
 
-    # Email 1:notify employee that LDC is available
+    # Check flag before sending creation email
+    if not _enabled():
+        return
+
     try:
         employee_user = frappe.db.get_value("Employee", employee, "user_id")
         employee_name = frappe.db.get_value("Employee", employee, "employee_name")
@@ -97,6 +103,10 @@ def create_ldc_for_employee(employee: str, department: str, reports_to: str, qua
         frappe.log_error(frappe.get_traceback(), "create_ldc_for_employee: notification failed")
 
 def send_ldc_reminders():
+    # Check flag before sending reminder email
+    if not _enabled():
+        return
+
     """Send reminder emails for draft LDCs for the current quarter."""
     target_date = frappe.utils.getdate()
     quarter_label = _get_quarter_label(target_date)
@@ -133,6 +143,10 @@ def notify_manager_on_submit(doc):
     """Notify manager when an employee submits their LDC."""
     manager_emp = doc.reports_to
     if not manager_emp:
+        return
+
+    # Check flag before sending an update to manager
+    if not _enabled():
         return
 
     manager_user = frappe.db.get_value("Employee", manager_emp, "user_id")

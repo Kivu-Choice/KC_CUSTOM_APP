@@ -174,12 +174,15 @@ doc_events = {
 
 scheduler_events = {
     "cron": {
-        # Runs at 7:30 AM on the 28th of Mar, Jun, Sep, Dec
-        "30 7 28 3,6,9,12 *": [
+        # Runs at 7:30 AM on the 30th of Mar, Jun, Sep, Dec
+        "30 7 30 3,6,9,12 *": [
             "kc_custom_app.notifications.ldc.send_ldc_reminders"
         ],
         "5 8 * * *": [
 			"kc_custom_app.kc_custom_app.utils.bnr_exchange.fetch_bnr_rates"
+		],
+        "10 8 28 9 *": [
+			"kc_custom_app.notifications.appraisal_pending_approval.process_appraisal_pending_notifications"
 		],
 		"0 10 * * 1-5": [
 			"kc_custom_app.notifications.pending_po_digest.send_pending_po_digest"
@@ -188,8 +191,8 @@ scheduler_events = {
             "kc_custom_app.notifications.po_pending_approval.send_pending_po_notifications",
 			"kc_custom_app.notifications.mr_pending_approval.send_pending_mr_notifications"
         ],
-        # Runs at 2:00 PM (14:00) on the 24th of Mar, Jun, Sep, Dec
-        "00 14 24 3,6,9,12 *": [
+        # Runs at 7:00 AM (7:00) on the 28th of Mar, Jun, Sep, Dec
+        "0 7 28 3,6,9,12 *": [
             "kc_custom_app.notifications.ldc.generate_quarterly_ldcs"
         ],
         "0 19 * * 1-6": [
