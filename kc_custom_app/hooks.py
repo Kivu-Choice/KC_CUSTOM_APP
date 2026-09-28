@@ -61,7 +61,12 @@ doctype_js = {
 # ----------
 
 # application home page (will override Website Settings)
-# home_page = "login"
+home_page = "frontend"
+
+# Use a specific path for the website to avoid clashing with ERPNext system routes
+website_route_rules = [
+    {"from_route": "/frontend/<path:app_path>", "to_route": "frontend"},
+]
 
 # website user home page (by Role)
 # role_home_page = {
@@ -133,9 +138,9 @@ doctype_js = {
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Appraisal Cycle": "kc_custom_app.kc_custom_app.overrides.appraisal_cycle.KCAppraisalCycle"
+ }
 
 # Document Events
 # ---------------
@@ -181,7 +186,11 @@ scheduler_events = {
         "5 8 * * *": [
 			"kc_custom_app.kc_custom_app.utils.bnr_exchange.fetch_bnr_rates"
 		],
-        "10 8 28 9 *": [
+        # Runs at 8:10 AM on the 28th of Mar, Jun, Sep, Dec
+        "10 8 28 3,6,9,12 *": [
+            "kc_custom_app.notifications.ldc.generate_quarterly_ldcs"
+        ],
+        "20 8 28 9 *": [
 			"kc_custom_app.notifications.appraisal_pending_approval.process_appraisal_pending_notifications"
 		],
 		"0 10 * * 1-5": [
@@ -190,10 +199,6 @@ scheduler_events = {
         "0 13 * * 1-5": [
             "kc_custom_app.notifications.po_pending_approval.send_pending_po_notifications",
 			"kc_custom_app.notifications.mr_pending_approval.send_pending_mr_notifications"
-        ],
-        # Runs at 7:00 AM (7:00) on the 28th of Mar, Jun, Sep, Dec
-        "0 7 28 3,6,9,12 *": [
-            "kc_custom_app.notifications.ldc.generate_quarterly_ldcs"
         ],
         "0 19 * * 1-6": [
             "kc_custom_app.notifications.se_branch_stock_receipt.send_daily_fish_received_digest",
