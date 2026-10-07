@@ -5,6 +5,7 @@ FEATURE_FLAG_KEY = "kc_custom_app_notifications_feature_enabled"
 # recipient email -> greeting name
 RECIPIENT_NAME = {
     "bkwisanga@kivuchoice.com": "Brice",
+	"prukundo@kivuchoice.com": "Pacifique",
     "jmurengera@kivuchoice.com": "Justin",
     "inimuhoze@kivuchoice.com": "Immaculee",
 }
@@ -22,9 +23,49 @@ for cc in [
     "306001 - Fish Logistics Fleet - KC",
     "306002 - Feed Logitics Fleet - KC",
     "306003 - Logistics Fleet Maintenance - KC",
+	"204004 - Farm Fleet Land Based - KC",
+	"204014 - Cage Fabrication - KC",
+	"204011 - Net Fabrication and Weaving - KC",
+	"204005 - Farm Administration - KC",
+	"103001 - Processing - KC",
+	"102006 - Boats and Distribution - KC",
 ]:
     CC_TO_RECIPIENT[cc] = "bkwisanga@kivuchoice.com"
-
+	
+# prukundo@kivuchoice.com
+for cc in [
+    "204007 - Groundskeeping - KC",
+    "103002 - Quality Assurance - KC",
+    "204002 - Circular Economy - Waste Management - KC",
+    "204008 - Health and Safety - KC",
+    "102007 - Net Exchange and Cage Maintenance - KC",
+    "102009 - Lake Operations Harvesting - KC",
+    "102010 - Lake Operations Grading - KC",
+    "102003 - Early Stage Feeding - KC",
+    "102004 - Offshore Lake Feeding - KC",
+	"101001 - HERO Program - KC",
+	"101002 - Incubation - KC",
+	"101008 - Hatchery Ops - KC",
+	"511008 - Information Technology - KC",
+	"102012 - Fish Health - KC",
+	"511006 - Procurement - KC",
+	"512001 - Community Relations - KC",
+	"512002 - Reforestation - KC",
+	"101003 - Egg Collection - KC",
+	"101004 - Pond Environment - KC",
+	"101005 - Pond Feeding - KC",
+	"101006 - Pond Fish Handling - KC",
+	"101007 - Broodstock - KC",
+	"102011 - Lake Operations Feed Stores - KC",
+	"102002 - Cage Mooring - KC",
+	"102005 - Lake Operations Divers - KC",
+	"102008 - Lake Environment and Data - KC",
+	"102001 - Production Planning and Reporting - KC",
+	"512003 - Fish Powder - KC",
+	"204006 - Farm Warehouse - KC",
+]:
+    CC_TO_RECIPIENT[cc] = "prukundo@kivuchoice.com"
+	
 # jmurengera@kivuchoice.com
 for cc in [
     "101001 - HERO Program - KC",
@@ -102,6 +143,7 @@ for cc in [
     "511008 - Information Technology - KC",
     "512001 - Community Relations - KC",
     "512002 - Reforestation - KC",
+	"204009 - HouseKeeping - KC",
 ]:
     CC_TO_RECIPIENT[cc] = "inimuhoze@kivuchoice.com"
 
