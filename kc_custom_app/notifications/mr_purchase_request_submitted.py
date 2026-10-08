@@ -5,27 +5,32 @@ FEATURE_FLAG_KEY = "kc_custom_app_notifications_feature_enabled"
 # recipient email -> greeting name
 RECIPIENT_NAME = {
     "bkwisanga@kivuchoice.com": "Brice",
-    "jmurengera@kivuchoice.com": "Justin",
-    "inimuhoze@kivuchoice.com": "Immaculee",
+    "prukundo@kivuchoice.com": "Pacifique",
+    "inimuhoze@kivuchoice.com": "Immaculee"
 }
 
 CC_TO_RECIPIENT = {}
 
-# bkwisanga@kivuchoice.com
+# bkwisanga@kivuchoice.com (Brice)
 for cc in [
     "101009 - Hatchery Security - KC",
     "101010 - Kigembe Hatchery Construction - KC",
+    "102006 - Boats and Distribution - KC",
+    "103001 - Processing - KC",
     "204003 - Kagano Construction - KC",
+    "204004 - Farm Fleet Land Based - KC",
+    "204005 - Farm Administration - KC",
     "204010 - Maintenance - KC",
     "204012 - Farm Security - KC",
     "204013 - Mwaga Construction - KC",
+    "204014 - Cage Fabrication - KC",
     "306001 - Fish Logistics Fleet - KC",
     "306002 - Feed Logitics Fleet - KC",
     "306003 - Logistics Fleet Maintenance - KC",
 ]:
     CC_TO_RECIPIENT[cc] = "bkwisanga@kivuchoice.com"
 
-# jmurengera@kivuchoice.com
+# prukundo@kivuchoice.com (Pacifique)
 for cc in [
     "101001 - HERO Program - KC",
     "101002 - Incubation - KC",
@@ -37,33 +42,32 @@ for cc in [
     "101008 - Hatchery Ops - KC",
     "102001 - Production Planning and Reporting - KC",
     "102002 - Cage Mooring - KC",
-    "102003 - Inshore Lake Feeding - KC",
+    "102003 - Early Stage Feeding - KC",
     "102004 - Offshore Lake Feeding - KC",
     "102005 - Lake Operations Divers - KC",
-    "102006 - Boats and Distribution - KC",
     "102007 - Net Exchange and Cage Maintenance - KC",
     "102008 - Lake Environment and Data - KC",
     "102009 - Lake Operations Harvesting - KC",
     "102010 - Lake Operations Grading - KC",
     "102011 - Lake Operations Feed Stores - KC",
     "102012 - Fish Health - KC",
-    "103001 - Processing - KC",
     "103002 - Quality Assurance - KC",
     "204002 - Circular Economy - Waste Management - KC",
-    "204004 - Farm Fleet Land Based - KC",
-    "204005 - Farm Administration - KC",
     "204006 - Farm Warehouse - KC",
     "204007 - Groundskeeping - KC",
     "204008 - Health and Safety - KC",
-    "204009 - HouseKeeping - KC",
     "204011 - Net Fabrication and Weaving - KC",
-    "204014 - Cage Fabrication - KC",
+    "511006 - Procurement - KC",
+    "511008 - Information Technology - KC",
+    "512001 - Community Relations - KC",
+    "512002 - Reforestation - KC",
     "512003 - Fish Powder - KC",
 ]:
-    CC_TO_RECIPIENT[cc] = "jmurengera@kivuchoice.com"
+    CC_TO_RECIPIENT[cc] = "prukundo@kivuchoice.com"
 
-# inimuhoze@kivuchoice.com
+# inimuhoze@kivuchoice.com (Immaculee)
 for cc in [
+    "204009 - HouseKeeping - KC",
     "305001 - Kigali LC - KC",
     "305002 - Kamembe LC - KC",
     "305003 - Gisenyi LC - KC",
@@ -97,18 +101,12 @@ for cc in [
     "511003 - Finance - KC",
     "511004 - Human Resources - KC",
     "511005 - Administration - KC",
-    "511006 - Procurement - KC",
     "511007 - Strategy and Operations - KC",
-    "511008 - Information Technology - KC",
-    "512001 - Community Relations - KC",
-    "512002 - Reforestation - KC",
 ]:
     CC_TO_RECIPIENT[cc] = "inimuhoze@kivuchoice.com"
 
-
 def _enabled() -> bool:
     return bool(frappe.conf.get(FEATURE_FLAG_KEY))
-
 
 def send_material_request_purchase_submitted_notification(doc, method=None):
     """Hook on Material Request -> on_submit. Only for Purchase requests."""
