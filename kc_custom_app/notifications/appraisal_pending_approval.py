@@ -1,5 +1,23 @@
+import calendar
 import frappe
 from frappe.utils import get_url_to_form, getdate, nowdate
+
+def _get_target_cycle_date(today_date):
+    """
+    Determines which appraisal cycle month to evaluate:
+    - Running on/before the 14th (e.g., 2nd Friday): targets previous month's cycle.
+    - Running after the 14th (e.g., last Friday): targets current month's cycle.
+    """
+    year = today_date.year
+    month = today_date.month
+
+    if today_date.day <= 14:
+        if month == 1:
+            return getdate(f"{year - 1}-12-15")
+        return getdate(f"{year}-{month - 1:02d}-15")
+
+    return getdate(f"{year}-{month:02d}-15")
+
 
 def _get_approver_by_job_level(employee_name: str, target_job_level: str) -> str | None:
     """
@@ -53,12 +71,10 @@ def _get_target_job_level_from_state(workflow_state: str) -> str | None:
 
 def _send_grouped_approval_emails(approver_grouped_items: dict):
     """
-    Sends one consolidated email per approver containing a list of all their pending items.
+    Sends one consolidated email per approver containing a list of all their pending items,
+    with static CCs attached.
     """
-    # --- TESTING RECIPIENTS ---
-    test_recipients = [
-        "huwizera@kivuchoice.com",
-        "cmukunzi@kivuchoice.com",
+    cc_recipients = [
         "ashema@kivuchoice.com",
         "ikamanda@kivuchoice.com"
     ]
@@ -67,13 +83,24 @@ def _send_grouped_approval_emails(approver_grouped_items: dict):
         if not items:
             continue
 
+        # Look up approver details
         approver_name = (
             frappe.db.get_value("User", approver_user_id, "full_name")
             or frappe.db.get_value("Employee", approver_user_id, "employee_name")
             or approver_user_id
         )
 
-        # Build combined table of pending appraisals
+        # Resolve dynamic primary recipient
+        approver_email = frappe.db.get_value("User", approver_user_id, "email")
+        if not approver_email and "@" in str(approver_user_id):
+            approver_email = approver_user_id
+        elif not approver_email:
+            approver_email = frappe.db.get_value("Employee", approver_user_id, "user_id")
+
+        if not approver_email or "@" not in str(approver_email):
+            continue
+
+        # Build combined HTML table
         items_rows_html = ""
         for item in items:
             doc_url = get_url_to_form("Appraisal", item["doc_name"])
@@ -86,7 +113,7 @@ def _send_grouped_approval_emails(approver_grouped_items: dict):
                 </tr>
             """
 
-        subject = f"[TESTING] Action Required: {len(items)} Pending Appraisal Approval(s) - {approver_name}"
+        subject = f"Action Required: {len(items)} Pending Appraisal Approval(s) - {approver_name}"
 
         message = f"""
             <p>Dear <b>{approver_name}</b>,</p>
@@ -105,30 +132,29 @@ def _send_grouped_approval_emails(approver_grouped_items: dict):
                 </tbody>
             </table>
             <br>
-            <p><b>Resolved Approver Account:</b> {approver_user_id}</p>
-            <p><i>Automated digest test notification from Kivu Choice ERP.</i></p>
+            <p><i>Automated digest notification from Kivu Choice ERP.</i></p>
         """
-
-        # --- PRODUCTION EMAIL LOGIC (DISABLED FOR TESTING) ---
-        # approver_email = frappe.db.get_value("User", approver_user_id, "email") or approver_user_id
-        # recipients = [approver_email] if (approver_email and "@" in approver_email) else []
-
-        recipients = test_recipients
-
-        if recipients:
-            frappe.sendmail(
-                recipients=recipients,
-                subject=subject,
-                message=message
-            )
+        frappe.sendmail(
+            recipients=[approver_email],
+            cc=cc_recipients,
+            subject=subject,
+            message=message,
+            now=True
+        )
 
 
 def process_appraisal_pending_notifications():
     """
-    Checks active monthly cycles, processes unsubmitted appraisals,
-    groups pending items by resolved approver, and sends consolidated emails.
+    Evaluates active cycle for target month based on schedule rules,
+    filters inactive employees, updates approvers safely, and dispatches digest emails.
     """
     today = getdate(nowdate())
+
+    # Optional: If configured as a generic weekly scheduler job, skip non-Fridays
+    if today.weekday() != 4:
+        return
+
+    target_date = _get_target_cycle_date(today)
 
     active_cycles = frappe.get_all(
         "Appraisal Cycle",
@@ -139,8 +165,8 @@ def process_appraisal_pending_notifications():
     current_cycle_names = [
         cycle.name for cycle in active_cycles
         if cycle.start_date and cycle.end_date and
-        getdate(cycle.start_date).month <= today.month <= getdate(cycle.end_date).month and
-        getdate(cycle.start_date).year <= today.year <= getdate(cycle.end_date).year
+        getdate(cycle.start_date).month <= target_date.month <= getdate(cycle.end_date).month and
+        getdate(cycle.start_date).year <= target_date.year <= getdate(cycle.end_date).year
     ]
 
     if not current_cycle_names:
@@ -149,17 +175,21 @@ def process_appraisal_pending_notifications():
     open_appraisals = frappe.get_all(
         "Appraisal",
         filters={
-            "kra_template": ["in", current_cycle_names],
+            "appraisal_cycle": ["in", current_cycle_names],
             "docstatus": 0,
             "workflow_state": ["not in", ["Approved", "Rejected"]]
         },
         fields=["name", "employee", "employee_name", "department", "workflow_state", "custom_appraisal_approver"]
     )
 
-    # Dictionary to aggregate pending items grouped by approver: { approver_user_id: [item1, item2, ...] }
     grouped_notifications = {}
 
     for appraisal_data in open_appraisals:
+        # Skip inactive employees
+        emp_status = frappe.db.get_value("Employee", appraisal_data.employee, "status")
+        if emp_status != "Active":
+            continue
+
         doc = frappe.get_doc("Appraisal", appraisal_data.name)
         target_approver = None
 
@@ -167,20 +197,20 @@ def process_appraisal_pending_notifications():
         if doc.workflow_state == "Draft":
             if not doc.custom_appraisal_approver:
                 direct_manager = frappe.db.get_value("Employee", doc.employee, "reports_to")
-                doc.custom_appraisal_approver = frappe.db.get_value("Employee", direct_manager, "user_id") if direct_manager else None
-                if doc.custom_appraisal_approver:
-                    doc.save(ignore_permissions=True)
-
+                resolved_approver = frappe.db.get_value("Employee", direct_manager, "user_id") if direct_manager else None
+                if resolved_approver:
+                    frappe.db.set_value("Appraisal", doc.name, "custom_appraisal_approver", resolved_approver, update_modified=False)
+                    doc.custom_appraisal_approver = resolved_approver
             target_approver = doc.custom_appraisal_approver
 
         # 2. Pending Approval states
-        elif "Pending Approval" in (doc.workflow_state or ""):
+        elif doc.workflow_state and "Pending Approval" in doc.workflow_state:
             required_level = _get_target_job_level_from_state(doc.workflow_state)
             if required_level:
                 approver = _get_approver_by_job_level(doc.employee, required_level)
                 if approver and approver != doc.custom_appraisal_approver:
+                    frappe.db.set_value("Appraisal", doc.name, "custom_appraisal_approver", approver, update_modified=False)
                     doc.custom_appraisal_approver = approver
-                    doc.save(ignore_permissions=True)
 
                 target_approver = approver or doc.custom_appraisal_approver
 
@@ -193,6 +223,6 @@ def process_appraisal_pending_notifications():
                 "workflow_state": doc.workflow_state
             })
 
-    # Dispatch one email per approver with all grouped records
+    # Dispatch emails per approver with grouped records
     if grouped_notifications:
         _send_grouped_approval_emails(grouped_notifications)

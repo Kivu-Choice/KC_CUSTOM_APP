@@ -184,17 +184,18 @@ scheduler_events = {
             "kc_custom_app.notifications.ldc.send_ldc_reminders"
         ],
         "5 8 * * *": [
-			"kc_custom_app.kc_custom_app.utils.bnr_exchange.fetch_bnr_rates"
-		],
+            "kc_custom_app.kc_custom_app.utils.bnr_exchange.fetch_bnr_rates"
+        ],
         # Runs at 8:10 AM on the 28th of Mar, Jun, Sep, Dec
         "10 8 28 3,6,9,12 *": [
             "kc_custom_app.notifications.ldc.generate_quarterly_ldcs"
         ],
-        "20 8 28 9 *": [
-			"kc_custom_app.notifications.appraisal_pending_approval.process_appraisal_pending_notifications"
-		],
-		"0 10 * * 1-5": [
-			"kc_custom_app.notifications.pending_po_digest.send_pending_po_digest"
+        # Runs at 8:20 AM every Friday
+        "20 8 * * 5": [
+            "kc_custom_app.notifications.appraisal_pending_approval.process_appraisal_pending_notifications"
+        ],
+        "0 10 * * 1-5": [
+            "kc_custom_app.notifications.pending_po_digest.send_pending_po_digest"
         ],
         "0 13 * * 1-5": [
             "kc_custom_app.notifications.po_pending_approval.send_pending_po_notifications",
