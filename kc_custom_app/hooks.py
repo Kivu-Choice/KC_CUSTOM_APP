@@ -46,7 +46,8 @@ app_license = "mit"
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_js = {
     "Purchase Receipt": "custom_scripts/client_scripts/purchase_receipt.js",
-    "Department Appraisal": "custom_scripts/client_scripts/department_appraisal.js"
+    "Department Appraisal": "custom_scripts/client_scripts/department_appraisal.js",
+    "Salary Structure Assignment": "customization/salary_structure_assignment/salary_structure_assignment.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -172,6 +173,9 @@ doc_events = {
 	"Payment Entry": {
         "on_submit": "kc_custom_app.custom_scripts.server_scripts.payment_entry.on_submit"
     },
+    "Salary Structure Assignment": {
+        "validate": "kc_custom_app.customization.salary_structure_assignment.salary_structure_assignment.validate"
+    }
 }
 
 # Scheduled Tasks
