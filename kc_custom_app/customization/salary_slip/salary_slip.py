@@ -16,44 +16,44 @@ class CustomSalarySlip(SalarySlip):
 
         return data, default_data
 
-	def add_additional_salary_components(self, component_type):
-		additional_salaries = get_additional_salaries(
-			self.employee, self.start_date, self.end_date, component_type
-		)
+    def add_additional_salary_components(self, component_type):
+        additional_salaries = get_additional_salaries(
+            self.employee, self.start_date, self.end_date, component_type
+        )
 
-		convertable_components = frappe.db.get_all(
-			"Salary Component", {"custom_is_in_employee_currency": 1}, pluck="name"
-		)
+        convertable_components = frappe.db.get_all(
+            "Salary Component", {"custom_is_in_employee_currency": 1}, pluck="name"
+        )
 
-		for additional_salary in additional_salaries:
-			if additional_salary.component in convertable_components:
-				additional_salary.amount *= self.exchange_rate
-			self.update_component_row(
-				get_salary_component_data(additional_salary.component),
-				additional_salary.amount,
-				component_type,
-				additional_salary,
-				is_recurring=additional_salary.is_recurring,
-			)
+        for additional_salary in additional_salaries:
+            if additional_salary.component in convertable_components:
+                additional_salary.amount *= self.exchange_rate
+            self.update_component_row(
+                get_salary_component_data(additional_salary.component),
+                additional_salary.amount,
+                component_type,
+                additional_salary,
+                is_recurring=additional_salary.is_recurring,
+            )
 
 def validate(self, method):
-	update_foreign_currency(self)
+    update_foreign_currency(self)
 
 def update_foreign_currency(self):
-	if not self.payroll_entry:
-		return
+    if not self.payroll_entry:
+        return
 
-	exchange_rate = flt(frappe.db.get_value("Payroll Entry", self.payroll_entry, "exchange_rate"))
-	if exchange_rate <= 1:
-		return
+    exchange_rate = flt(frappe.db.get_value("Payroll Entry", self.payroll_entry, "exchange_rate"))
+    if exchange_rate <= 1:
+        return
 
-	foreign_currency = frappe.db.get_value("Employee", self.employee, "salary_currency")
+    foreign_currency = frappe.db.get_value("Employee", self.employee, "salary_currency")
 
-	for row in self.earnings + self.deductions:
-		amount = row.amount or row.default_amount or row.additional_amount
-		row.custom_foreign_amount = fmt_money(flt(amount / exchange_rate, 3), 2, foreign_currency)
+    for row in self.earnings + self.deductions:
+        amount = row.amount or row.default_amount or row.additional_amount
+        row.custom_foreign_amount = fmt_money(flt(amount / exchange_rate, 3), 2, foreign_currency)
 
-	self.custom_foreign_gross_pay = fmt_money(flt(self.gross_pay / exchange_rate, 2), 2, foreign_currency)
-	self.custom_foreign_total_deduction = fmt_money(flt(self.total_deduction / exchange_rate, 2), 2, foreign_currency)
-	self.custom_foreign_net_pay = fmt_money(flt(self.net_pay / exchange_rate, 2), 2, foreign_currency)
-	self.custom_foreign_rounded_total = fmt_money(flt(self.rounded_total / exchange_rate, 0), 2, foreign_currency)
+    self.custom_foreign_gross_pay = fmt_money(flt(self.gross_pay / exchange_rate, 2), 2, foreign_currency)
+    self.custom_foreign_total_deduction = fmt_money(flt(self.total_deduction / exchange_rate, 2), 2, foreign_currency)
+    self.custom_foreign_net_pay = fmt_money(flt(self.net_pay / exchange_rate, 2), 2, foreign_currency)
+    self.custom_foreign_rounded_total = fmt_money(flt(self.rounded_total / exchange_rate, 0), 2, foreign_currency)
