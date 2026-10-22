@@ -139,9 +139,10 @@ doctype_js = {
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"Appraisal Cycle": "kc_custom_app.kc_custom_app.overrides.appraisal_cycle.KCAppraisalCycle"
-#  }
+override_doctype_class = {
+	"Payroll Entry": "kc_custom_app.kc_custom_app.customization.payroll_entry.payroll_entry.CustomPayrollEntry",
+    "Salary Slip": "kc_custom_app.kc_custom_app.customization.salary_slip.salary_slip.CustomSalarySlip"
+ }
 
 # Document Events
 # ---------------
@@ -187,7 +188,7 @@ scheduler_events = {
         "30 7 30 3,6,9,12 *": [
             "kc_custom_app.notifications.ldc.send_ldc_reminders"
         ],
-        "5 8 * * *": [
+        "0 9 * * *": [
             "kc_custom_app.kc_custom_app.utils.bnr_exchange.fetch_bnr_rates"
         ],
         # Runs at 8:10 AM on the 28th of Mar, Jun, Sep, Dec
