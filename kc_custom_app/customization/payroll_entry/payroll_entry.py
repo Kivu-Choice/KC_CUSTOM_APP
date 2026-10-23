@@ -1,5 +1,6 @@
 import frappe
 from frappe import _
+from frappe.utils import flt
 from hrms.payroll.doctype.payroll_entry.payroll_entry import PayrollEntry
 
 
@@ -90,3 +91,20 @@ class CustomPayrollEntry(PayrollEntry):
             params,
             as_dict=True,
         )
+
+    def get_amount_and_exchange_rate_for_journal_entry(self, account, amount, company_currency, currencies):
+        """Slip amounts are already in company currency (RWF).
+        RWF accounts take the amount as is. Foreign accounts (USD bank)
+        get amount / rate, with the rate on the line."""
+        account_currency = frappe.db.get_value("Account", account, "account_currency")
+
+        if account_currency not in currencies:
+            currencies.append(account_currency)
+        if company_currency not in currencies:
+            currencies.append(company_currency)
+
+        if account_currency == company_currency:
+            return 1, flt(amount)
+
+        rate = flt(self.exchange_rate) or 1
+        return rate, flt(amount) / rate
