@@ -1,0 +1,58 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-11-06 17:47:58.008227",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "interview_round",
+  "interviewer_name",
+  "job_title",
+  "email_phone"
+ ],
+ "fields": [
+  {
+   "fieldname": "interview_round",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Interview Round",
+   "options": "Round 1: Talent Acquisition Team\nRound 2: Hiring Manager\nRound 3: Another Manager",
+   "reqd": 1
+  },
+  {
+   "fieldname": "interviewer_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "job_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Job Title"
+  },
+  {
+   "fieldname": "email_phone",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Email / Phone"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-06 17:52:00.380350",
+ "modified_by": "Administrator",
+ "module": "KC Custom App",
+ "name": "Job Requisition Interviewer",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

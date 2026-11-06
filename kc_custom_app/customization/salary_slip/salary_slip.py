@@ -46,6 +46,22 @@ class CustomSalarySlip(SalarySlip):
                 is_recurring=additional_salary.is_recurring,
             )
 
+        def update_component_row(self, component_data, amount, component_type, *args, **kwargs):
+        super().update_component_row(component_data, amount, component_type, *args, **kwargs)
+
+        name = component_data.get("salary_component")
+        if not name or not self.is_negative_component(name):
+            return
+
+        for row in self.get(component_type):
+            if row.salary_component == name and flt(row.amount) > 0:
+                row.amount = -flt(row.amount)
+                row.default_amount = -flt(row.default_amount)
+                row.additional_amount = -flt(row.additional_amount)
+
+    def is_negative_component(self, name):
+        return bool(frappe.get_cached_value("Salary Component", name, "custom_is_negative_component"))
+
 def validate(self, method):
     update_foreign_currency(self)
     sync_base_to_company_currency(self)

@@ -235,16 +235,23 @@ scheduler_events = {
 	# ],
 }
 
-
 fixtures = [
-    "Client Script",
-    "Server Script",
-    "Custom Field",
-    "Property Setter",
-    {"dt": "Client Script", "filters": [["module", "like", "KC Custom App"]]},
-    {"dt": "Server Script", "filters": [["module", "like", "KC Custom App"]]},
-    {"dt": "Custom Field", "filters": [["module", "like", "KC Custom App"]]},
-    {"dt": "Property Setter", "filters": [["module", "like", "KC Custom App"]]},
+    {
+        "dt": "Custom Field",
+        "filters": [["dt", "=", "Job Requisition"]]
+    },
+    {
+        "dt": "Property Setter",
+        "filters": [["doc_type", "=", "Job Requisition"]]
+    },
+    {
+        "dt": "Client Script",
+        "filters": [["dt", "=", "Job Requisition"]]
+    },
+    {
+        "dt": "Server Script",
+        "filters": [["reference_doctype", "=", "Job Requisition"]]
+    }
 ]
 # Testing
 # -------
