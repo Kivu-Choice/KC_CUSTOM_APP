@@ -46,7 +46,7 @@ class CustomSalarySlip(SalarySlip):
                 is_recurring=additional_salary.is_recurring,
             )
 
-        def update_component_row(self, component_data, amount, component_type, *args, **kwargs):
+    def update_component_row(self, component_data, amount, component_type, *args, **kwargs):
         super().update_component_row(component_data, amount, component_type, *args, **kwargs)
 
         name = component_data.get("salary_component")
