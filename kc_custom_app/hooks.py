@@ -149,6 +149,26 @@ override_doctype_class = {
 # Hook on document methods and events
 
 doc_events = {
+    # --- Security guards (kc_custom_app/guards.py) ---
+    "User": {
+        "validate": "kc_custom_app.guards.protect_payroll_role"
+    },
+    "Role Profile": {
+        "validate": "kc_custom_app.guards.protect_payroll_role_profile"
+    },
+    "Custom DocPerm": {
+        "validate": "kc_custom_app.guards.protect_custom_docperm",
+        "on_trash": "kc_custom_app.guards.protect_custom_docperm",
+    },
+    "Custom Field": {
+        "validate": "kc_custom_app.guards.protect_custom_field",
+        "on_trash": "kc_custom_app.guards.protect_custom_field",
+    },
+    "Property Setter": {
+        "validate": "kc_custom_app.guards.protect_property_setter",
+        "on_trash": "kc_custom_app.guards.protect_property_setter",
+    },
+    # --- Existing hooks ---
     "Purchase Order": {
         "on_update": "kc_custom_app.notifications.po_pending_approval.send_po_approved_notification"
     },
@@ -263,7 +283,11 @@ fixtures = [
 #
 override_whitelisted_methods = {
     "erpnext.stock.doctype.material_request.material_request.make_purchase_order":
-        "kc_custom_app.custom_scripts.server_scripts.material_request.make_purchase_order"
+        "kc_custom_app.custom_scripts.server_scripts.material_request.make_purchase_order",
+    "frappe.core.page.permission_manager.permission_manager.add": "kc_custom_app.guards.pm_add",
+    "frappe.core.page.permission_manager.permission_manager.update": "kc_custom_app.guards.pm_update",
+    "frappe.core.page.permission_manager.permission_manager.remove": "kc_custom_app.guards.pm_remove",
+    "frappe.core.page.permission_manager.permission_manager.reset": "kc_custom_app.guards.pm_reset"
 }
 #
 # each overriding function accepts a `data` argument;
@@ -329,4 +353,3 @@ override_whitelisted_methods = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-
