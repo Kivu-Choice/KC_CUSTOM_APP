@@ -179,7 +179,7 @@ doc_events = {
 	# 	"on_submit": "kc_custom_app.custom_scripts.server_scripts.delivery_note.on_submit"
 	# },
 	"Department Appraisal": {
-		"on_submit": "kc_custom_app.custom_scripts.server_scripts.department_appraisal.on_submit"
+		"validate": "kc_custom_app.custom_scripts.server_scripts.department_appraisal.validate"
 	},
  	# "Stock Entry": {
 	# 	"on_submit": "kc_custom_app.custom_scripts.server_scripts.stock_entry.on_submit"
