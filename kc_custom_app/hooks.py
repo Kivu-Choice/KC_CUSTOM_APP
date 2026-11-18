@@ -48,6 +48,7 @@ doctype_js = {
     "Purchase Receipt": "custom_scripts/client_scripts/purchase_receipt.js",
     "Department Appraisal": "custom_scripts/client_scripts/department_appraisal.js",
     "Salary Structure Assignment": "customization/salary_structure_assignment/salary_structure_assignment.js",
+    "Appraisal": "custom_scripts/client_scripts/appraisal.js"
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
