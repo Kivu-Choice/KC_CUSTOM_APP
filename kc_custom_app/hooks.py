@@ -175,9 +175,9 @@ doc_events = {
 	"Purchase Invoice": {
 		"on_submit": "kc_custom_app.custom_scripts.server_scripts.purchase_invoice.on_submit"
 	},
-	"Delivery Note": {
-		"on_submit": "kc_custom_app.custom_scripts.server_scripts.delivery_note.on_submit"
-	},
+	# "Delivery Note": {
+	# 	"on_submit": "kc_custom_app.custom_scripts.server_scripts.delivery_note.on_submit"
+	# },
 	"Department Appraisal": {
 		"on_submit": "kc_custom_app.custom_scripts.server_scripts.department_appraisal.on_submit"
 	},
